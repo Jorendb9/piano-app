@@ -15,6 +15,11 @@ than would normally be possible on touchscreens that lack pressure sensitivity.
 
 Functionally this means that rather than a single set of audio samples, the application will use at least 3 sets, corresponding with 3 levels of velocity.
 
+## Possible expansions (if feasible within time constraints)
+
+- Allow users to record short musical passages and save them in the internal storage
+- Select different instrument soundsets
+
 
 
 ## Possible complications
