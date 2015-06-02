@@ -1,5 +1,5 @@
 # Piano App
-Piano Application for Android
+Piano Instrument Application for Android with SNES sounds
 
 ## Idea 
 
