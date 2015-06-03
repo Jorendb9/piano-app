@@ -44,3 +44,4 @@ Additionally, in order to differentiate itself from similar applications, rather
 
 
 ## Sketches
+<img src="https://github.com/Jorendb9/piano-app/blob/master/imgs/Sketch.png?raw=true width="220" height="400" />
