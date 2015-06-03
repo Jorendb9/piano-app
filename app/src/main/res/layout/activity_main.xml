@@ -81,10 +81,10 @@
         <Button
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:text="A4"
+            android:text="A3"
             android:gravity="bottom"
             android:onClick="buttonOnClick"
-            android:id="@+id/buttonA4"
+            android:id="@+id/buttonA3"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/buttonG3"
             android:layout_toEndOf="@+id/buttonG3"
@@ -93,13 +93,13 @@
         <Button
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:text="B4"
+            android:text="B3"
             android:gravity="bottom"
             android:onClick="buttonOnClick"
-            android:id="@+id/buttonB4"
+            android:id="@+id/buttonB3"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/buttonA4"
-            android:layout_toEndOf="@+id/buttonA4"
+            android:layout_toRightOf="@+id/buttonA3"
+            android:layout_toEndOf="@+id/buttonA3"
             android:background="@drawable/button_white"/>
 
         <Button
@@ -110,8 +110,8 @@
             android:onClick="buttonOnClick"
             android:id="@+id/buttonC4"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/buttonB4"
-            android:layout_toEndOf="@+id/buttonB4"
+            android:layout_toRightOf="@+id/buttonB3"
+            android:layout_toEndOf="@+id/buttonB3"
             android:background="@drawable/button_white"/>
 
         <Button
@@ -158,8 +158,8 @@
         <Button
             android:layout_width="40dp"
             android:layout_height="170dp"
-            android:text="A#4"
-            android:id="@+id/buttonASharp4"
+            android:text="A#3"
+            android:id="@+id/buttonASharp3"
             android:onClick="buttonOnClick"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="400dp"
