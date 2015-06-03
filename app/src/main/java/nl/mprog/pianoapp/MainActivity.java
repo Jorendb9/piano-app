@@ -1,17 +1,70 @@
 package nl.mprog.pianoapp;
 
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private SoundPool soundPool;
+    private int soundID;
+    boolean loaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId,
+                                       int status) {
+                loaded = true;
+            }
+        });
+        soundID = soundPool.load(this, R.raw.singleguitar, 1);
+
+    }
+
+
+    public void buttonOnClick(View view)
+    {
+        /*switch(view.getId())
+        {
+            case R.id.button1:
+                // Code for button 1 click
+                break;
+
+            case R.id.button2:
+                // Code for button 2 click
+                break;
+
+            case R.id.button3:
+                // Code for button 3 click
+                break;
+        }*/
+
+        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        float actualVolume = (float) audioManager
+                .getStreamVolume(AudioManager.STREAM_MUSIC);
+        float maxVolume = (float) audioManager
+                .getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        float volume = actualVolume / maxVolume;
+
+        if (loaded)
+        {
+            soundPool.play(soundID, volume, volume, 1, 0, 1f);
+            Log.e("Test", "Played sound");
+        }
+
     }
 
 
