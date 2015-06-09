@@ -11,8 +11,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-
-
+import android.widget.HorizontalScrollView;
 
 
 public class MainActivity extends Activity implements View.OnTouchListener {
@@ -22,10 +21,13 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     boolean loaded = false;
     private Button buttonC, buttonCSharp, buttonD, buttonDSharp, buttonE, buttonF, buttonFSharp, buttonG, buttonGSharp, buttonA, buttonASharp, buttonB, buttonC8Va;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
         initButtons();
@@ -51,33 +53,33 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     public void initButtons(){
 
-        buttonC = (Button) findViewById(R.id.C);
-        buttonCSharp = (Button) findViewById(R.id.CSharp);
-        buttonD = (Button) findViewById(R.id.D);
-        buttonDSharp = (Button) findViewById(R.id.DSharp);
-        buttonE = (Button) findViewById(R.id.E);
-        buttonF = (Button) findViewById(R.id.F);
-        buttonFSharp = (Button) findViewById(R.id.FSharp);
-        buttonG = (Button) findViewById(R.id.G);
-        buttonGSharp = (Button) findViewById(R.id.GSharp);
-        buttonA = (Button) findViewById(R.id.A);
-        buttonASharp = (Button) findViewById(R.id.ASharp);
-        buttonB = (Button) findViewById(R.id.B);
-        buttonC8Va = (Button) findViewById(R.id.C8Va);
+        buttonC = (Button) findViewById(R.id.C3);
+        buttonCSharp = (Button) findViewById(R.id.CSharp3);
+        buttonD = (Button) findViewById(R.id.D3);
+        buttonDSharp = (Button) findViewById(R.id.DSharp3);
+        buttonE = (Button) findViewById(R.id.E3);
+        buttonF = (Button) findViewById(R.id.F3);
+        buttonFSharp = (Button) findViewById(R.id.FSharp3);
+        buttonG = (Button) findViewById(R.id.G3);
+        buttonGSharp = (Button) findViewById(R.id.GSharp3);
+        buttonA = (Button) findViewById(R.id.A3);
+        buttonASharp = (Button) findViewById(R.id.ASharp3);
+        buttonB = (Button) findViewById(R.id.B3);
+        buttonC8Va = (Button) findViewById(R.id.C4);
 
-        register(R.id.C);
-        register(R.id.CSharp);
-        register(R.id.D);
-        register(R.id.DSharp);
-        register(R.id.E);
-        register(R.id.F);
-        register(R.id.FSharp);
-        register(R.id.G);
-        register(R.id.GSharp);
-        register(R.id.A);
-        register(R.id.ASharp);
-        register(R.id.B);
-        register(R.id.C8Va);
+        register(R.id.C3);
+        register(R.id.CSharp3);
+        register(R.id.D3);
+        register(R.id.DSharp3);
+        register(R.id.E3);
+        register(R.id.F3);
+        register(R.id.FSharp3);
+        register(R.id.G3);
+        register(R.id.GSharp3);
+        register(R.id.A3);
+        register(R.id.ASharp3);
+        register(R.id.B3);
+        register(R.id.C4);
     }
 
 
@@ -90,56 +92,56 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         if (loaded)
         {
             switch(v.getId()){
-                case R.id.C:
+                case R.id.C3:
 
                     buttonPress(event, buttonC, c);
                     break;
 
-                case R.id.CSharp:
+                case R.id.CSharp3:
                     buttonPress(event, buttonCSharp, cSharp);
                     break;
 
-                case R.id.D:
+                case R.id.D3:
                     buttonPress(event, buttonD, d);
                     break;
 
-                case R.id.DSharp:
+                case R.id.DSharp3:
                     buttonPress(event, buttonDSharp, dSharp);
                     break;
 
-                case R.id.E:
+                case R.id.E3:
                     buttonPress(event, buttonE, e);
                     break;
 
-                case R.id.F:
+                case R.id.F3:
                     buttonPress(event, buttonF, f);
                     break;
 
-                case R.id.FSharp:
+                case R.id.FSharp3:
                     buttonPress(event, buttonFSharp, fSharp);
                     break;
 
-                case R.id.G:
+                case R.id.G3:
                     buttonPress(event, buttonG, g);
                     break;
 
-                case R.id.GSharp:
+                case R.id.GSharp3:
                     buttonPress(event, buttonGSharp, gSharp);
                     break;
 
-                case R.id.A:
+                case R.id.A3:
                     buttonPress(event, buttonA, a);
                     break;
 
-                case R.id.ASharp:
+                case R.id.ASharp3:
                     buttonPress(event, buttonASharp, aSharp);
                     break;
 
-                case R.id.B:
+                case R.id.B3:
                     buttonPress(event, buttonB, b);
                     break;
 
-                case R.id.C8Va:
+                case R.id.C4:
                     buttonPress(event, buttonC8Va, c8va);
                     break;
             }
@@ -159,16 +161,17 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
                 currentPlay = soundPool.play(soundId, volume, volume, 1, 0, 1f);
+                Log.d("1", "ID ="+ currentPlay);
                 button.setPressed(true);
-                return true;
+                break;
 
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
                 button.setPressed(false);
                 soundPool.stop(currentPlay);
-                return true;
+                break;
         }
-        return false;
+        return true;
     }
 
 
