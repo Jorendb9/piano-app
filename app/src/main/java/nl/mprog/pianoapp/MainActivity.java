@@ -11,8 +11,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 
 
@@ -79,71 +78,69 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         register(R.id.ASharp);
         register(R.id.B);
         register(R.id.C8Va);
-
     }
 
 
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
 
-        float volume = setVolume();
+    @Override
+    public boolean onTouch(View v, MotionEvent event)
+    {
 
         if (loaded)
         {
             switch(v.getId()){
                 case R.id.C:
 
-                    buttonPress(event, volume, buttonC, c);
-
+                    buttonPress(event, buttonC, c);
                     break;
 
                 case R.id.CSharp:
-                    buttonPress(event, volume, buttonCSharp, cSharp);
+                    buttonPress(event, buttonCSharp, cSharp);
                     break;
 
                 case R.id.D:
-                    buttonPress(event, volume, buttonD, d);
+                    buttonPress(event, buttonD, d);
                     break;
 
                 case R.id.DSharp:
-                    buttonPress(event, volume, buttonDSharp, dSharp);
+                    buttonPress(event, buttonDSharp, dSharp);
                     break;
 
                 case R.id.E:
-                    buttonPress(event, volume, buttonE, e);
+                    buttonPress(event, buttonE, e);
                     break;
 
                 case R.id.F:
-                    buttonPress(event, volume, buttonF, f);
+                    buttonPress(event, buttonF, f);
                     break;
 
                 case R.id.FSharp:
-                    buttonPress(event, volume, buttonFSharp, fSharp);
+                    buttonPress(event, buttonFSharp, fSharp);
                     break;
 
                 case R.id.G:
-                    buttonPress(event, volume, buttonG, g);
+                    buttonPress(event, buttonG, g);
                     break;
 
                 case R.id.GSharp:
-                    buttonPress(event, volume, buttonGSharp, gSharp);
+                    buttonPress(event, buttonGSharp, gSharp);
                     break;
 
                 case R.id.A:
-                    buttonPress(event, volume, buttonA, a);
+                    buttonPress(event, buttonA, a);
                     break;
 
                 case R.id.ASharp:
-                    buttonPress(event, volume, buttonASharp, aSharp);
+                    buttonPress(event, buttonASharp, aSharp);
                     break;
 
                 case R.id.B:
-                    buttonPress(event, volume, buttonB, b);
+                    buttonPress(event, buttonB, b);
                     break;
 
                 case R.id.C8Va:
-                    buttonPress(event, volume, buttonC8Va, c8va);
+                    buttonPress(event, buttonC8Va, c8va);
                     break;
             }
         }
@@ -151,21 +148,33 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
-    public boolean buttonPress(MotionEvent event, float volume, Button button, int soundId)
+    public boolean buttonPress(MotionEvent event, Button button, int soundId)
     {
         int currentPlay = 0;
+        float volume;
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
+
+                // uses yCoordinates of touch to determine note velocity
+                volume = volumeConverter(event.getY());
                 currentPlay = soundPool.play(soundId, volume, volume, 1, 0, 1f);
                 button.setPressed(true);
                 return true;
+
+            // stop playing when touch is released
             case MotionEvent.ACTION_UP:
                 button.setPressed(false);
                 soundPool.stop(currentPlay);
                 return true;
         }
         return false;
+    }
+
+
+    public float volumeConverter(float yCoordinates)
+    {
+        return (yCoordinates + 200)/1000;
     }
 
 
@@ -185,28 +194,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         b = soundPool.load(this, R.raw.guitarb3, 1);
         c8va = soundPool.load(this, R.raw.guitarc4, 1);
     }
-
-
-    public float setVolume()
-    {
-        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        float actualVolume = (float) audioManager
-                .getStreamVolume(AudioManager.STREAM_MUSIC);
-        float maxVolume = (float) audioManager
-                .getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        return actualVolume / maxVolume;
-    }
-
-    /*@Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // MotionEvent object holds X-Y values
-        if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            String text = "You click at x = " + event.getX() + " and y = " + event.getY();
-            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-        }
-
-        return super.onTouchEvent(event);
-    }*/
 
 
 

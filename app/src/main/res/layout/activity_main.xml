@@ -6,23 +6,13 @@
     android:gravity="bottom"
     android:layout_centerHorizontal="true">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:textSize="50dp"
-        android:text=""
-        android:gravity="center"
-        android:id="@+id/textView"
- />
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="270dp"
-        android:gravity="left"
+        android:gravity="start"
         android:id="@+id/relativeLayout">
-
-
 
 
         <Button
