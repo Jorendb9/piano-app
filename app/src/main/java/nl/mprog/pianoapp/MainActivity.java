@@ -29,12 +29,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         setContentView(R.layout.activity_main);
 
 
-
-        initButtons();
-
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
 
-        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener()
+        {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId,
                                        int status) {
@@ -42,7 +40,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             }
         });
 
-        loadSounds();
+        loadSounds("guitar");
+        initButtons();
 
     }
 
@@ -181,21 +180,41 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
-    public void loadSounds()
+    public void loadSounds(String instrument)
     {
-        c = soundPool.load(this, R.raw.guitarc3, 1);
-        cSharp = soundPool.load(this, R.raw.guitarcsharp3, 1);
-        d = soundPool.load(this, R.raw.guitard3, 1);
-        dSharp = soundPool.load(this, R.raw.guitardsharp3, 1);
-        e = soundPool.load(this, R.raw.guitare3, 1);
-        f = soundPool.load(this, R.raw.guitarf3, 1);
-        fSharp = soundPool.load(this, R.raw.guitarfsharp3, 1);
-        g = soundPool.load(this, R.raw.guitarg3, 1);
-        gSharp = soundPool.load(this, R.raw.guitargsharp3, 1);
-        a = soundPool.load(this, R.raw.guitara3, 1);
-        aSharp = soundPool.load(this, R.raw.guitarasharp3, 1);
-        b = soundPool.load(this, R.raw.guitarb3, 1);
-        c8va = soundPool.load(this, R.raw.guitarc4, 1);
+        int resId;
+        resId = getResId(instrument, "c3");
+        c = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "csharp3");
+        cSharp = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "d3");
+        d = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "dsharp3");
+        dSharp = soundPool.load(this,resId, 1);
+        resId = getResId(instrument, "e3");
+        e = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "f3");
+        f = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "fsharp3");
+        fSharp = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "g3");
+        g = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "gsharp3");
+        gSharp = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "a3");
+        a = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "asharp3");
+        aSharp = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "b3");
+        b = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "c4");
+        c8va = soundPool.load(this, resId, 1);
+    }
+
+    public int getResId(String instrument, String note)
+    {
+        String tempString = instrument + note;
+        return getResources().getIdentifier(tempString, "raw", getPackageName());
     }
 
 
