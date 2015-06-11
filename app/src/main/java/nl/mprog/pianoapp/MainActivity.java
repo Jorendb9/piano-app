@@ -13,20 +13,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
+
+import java.util.HashMap;
 
 
 public class MainActivity extends Activity implements View.OnTouchListener {
 
     private SoundPool soundPool;
     private int c2, cSharp2, d2, dSharp2, c, cSharp, d, dSharp, e, f, fSharp, g, gSharp, a, aSharp, b, c8va;
-    boolean loaded = false;
+    private boolean loaded = false;
     private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonC, buttonCSharp, buttonD, buttonDSharp, buttonE, buttonF, buttonFSharp, buttonG, buttonGSharp, buttonA, buttonASharp, buttonB, buttonC8Va;
     private boolean loopable = true, pitchAft = false;
-    private int currentPlay = 0, releaseTime = 0;
+    private int releaseTime = 0;
     private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
+    private HashMap<Button, Integer> soundMap = new HashMap<>();
 
 
 
@@ -235,54 +239,70 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     {
 
         float volume;
+
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
-                currentPlay = soundPool.play(soundId, volume, volume, 1, -1, 1f);
-                Log.d("1", "ID ="+ currentPlay);
+                int streamId = soundPool.play(soundId, volume, volume, 1, -1, 1f);
+                soundMap.put(button, streamId);
+                Log.d("1", "ID ="+ streamId);
                 button.setPressed(true);
                 break;
 
             case MotionEvent.ACTION_MOVE:
             {
-                TouchHandler(event);
+                TouchHandler(event, button);
                 break;
             }
 
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
                 button.setPressed(false);
-                releaseDelay(currentPlay);
-                currentPlay = 0;
+                releaseDelay(soundMap.get(button));
 
                 break;
         }
         return true;
     }
 
-    public void TouchHandler(MotionEvent event)
+
+
+    public void TouchHandler(MotionEvent event, Button button)
     {
         if (pitchAft)
         {
             float pitch = (float)(volumeConverter(event.getY()) -0.6) /10 + 1;
             Log.d("1", "Pitch = " + pitch);
-            soundPool.setRate(currentPlay, pitch);
+            soundPool.setRate(soundMap.get(button), pitch);
         }
         else
         {
             float volume2 = volumeConverter(event.getY());
-            soundPool.setVolume(currentPlay, volume2, volume2);
+            soundPool.setVolume(soundMap.get(button), volume2, volume2);
         }
     }
 
+
+    // temporary solution to infinitely looping sounds
+    public void onSoundKill(View view)
+    {
+        // pause all sounds currently playing and stop
+        soundPool.autoPause();
+        for (int value : soundMap.values())
+        {
+            soundPool.stop(value);
+        }
+    }
 
 
     public float volumeConverter(float yCoordinates)
     {
         return (yCoordinates + 200)/1000;
     }
+
+
 
 
     public void loadSounds(String instrument)
@@ -331,21 +351,21 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
     // account for variable note release timing
-    public void releaseDelay(final int streamID)
+    public void releaseDelay(final int streamId)
     {
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable()
         {
             @Override
             public void run() {
                 Log.d("1", "Note released!");
-                soundPool.stop(streamID);
+                soundPool.stop(streamId);
             }
 
         }, releaseTime);
 
     }
+
 
 
 
