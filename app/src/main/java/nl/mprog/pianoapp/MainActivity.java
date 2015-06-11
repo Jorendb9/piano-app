@@ -53,7 +53,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             }
         });
 
-        loadSounds("guitar");
+        loadSounds("square");
         initButtons();
         modWheelSetup();
 
@@ -154,6 +154,11 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         if (loaded)
         {
+            /*String IdAsString = v.getResources().getResourceName(v.getId());
+            String newId = IdAsString.substring(21);
+            Log.d("1", "ID = "+newId);
+            buttonPress(event, buttonC2, c2);*/
+
             switch(v.getId()){
 
 
@@ -307,19 +312,15 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     public void loadSounds(String instrument)
     {
-        c = soundPool.load(this, R.raw.squarec2, 1);
-        cSharp = soundPool.load(this, R.raw.squarecsharp2, 1);
-        d = soundPool.load(this, R.raw.squared2, 1);
-        dSharp = soundPool.load(this, R.raw.squaredsharp2, 1);
         int resId;
-        /*resId = getResId(instrument, "c3");
+        resId = getResId(instrument, "c3");
         c = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "csharp3");
         cSharp = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "d3");
         d = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "dsharp3");
-        dSharp = soundPool.load(this,resId, 1);*/
+        dSharp = soundPool.load(this,resId, 1);
         resId = getResId(instrument, "e3");
         e = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "f3");
