@@ -23,9 +23,9 @@ import java.util.HashMap;
 public class MainActivity extends Activity implements View.OnTouchListener {
 
     private SoundPool soundPool;
-    private int c2, cSharp2, d2, dSharp2, c, cSharp, d, dSharp, e, f, fSharp, g, gSharp, a, aSharp, b, c8va;
+    private int c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4;
     private boolean loaded = false;
-    private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonC, buttonCSharp, buttonD, buttonDSharp, buttonE, buttonF, buttonFSharp, buttonG, buttonGSharp, buttonA, buttonASharp, buttonB, buttonC8Va;
+    private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4;
     private boolean loopable = true, pitchAft = false;
     private int releaseTime = 0;
     private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
@@ -65,10 +65,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
-
-    private void register(int buttonResourceId){
-        findViewById(buttonResourceId).setOnTouchListener(this);
-    }
 
     public void modWheelSetup()
     {
@@ -113,22 +109,54 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
+    private void register(int buttonResourceId){
+        findViewById(buttonResourceId).setOnTouchListener(this);
+    }
+
+
 
     public void initButtons(){
 
-        buttonC = (Button) findViewById(R.id.C3);
-        buttonCSharp = (Button) findViewById(R.id.CSharp3);
-        buttonD = (Button) findViewById(R.id.D3);
-        buttonDSharp = (Button) findViewById(R.id.DSharp3);
-        buttonE = (Button) findViewById(R.id.E3);
-        buttonF = (Button) findViewById(R.id.F3);
-        buttonFSharp = (Button) findViewById(R.id.FSharp3);
-        buttonG = (Button) findViewById(R.id.G3);
-        buttonGSharp = (Button) findViewById(R.id.GSharp3);
-        buttonA = (Button) findViewById(R.id.A3);
-        buttonASharp = (Button) findViewById(R.id.ASharp3);
-        buttonB = (Button) findViewById(R.id.B3);
-        buttonC8Va = (Button) findViewById(R.id.C4);
+        buttonC2 = (Button) findViewById(R.id.C2);
+        buttonCSharp2 = (Button) findViewById(R.id.CSharp2);
+        buttonD2 = (Button) findViewById(R.id.D2);
+        buttonDSharp2 = (Button) findViewById(R.id.DSharp2);
+        buttonE2 = (Button) findViewById(R.id.E2);
+        buttonF2 = (Button) findViewById(R.id.F2);
+        buttonFSharp2 = (Button) findViewById(R.id.FSharp2);
+        buttonG2 = (Button) findViewById(R.id.G2);
+        buttonGSharp2 = (Button) findViewById(R.id.GSharp2);
+        buttonA2 = (Button) findViewById(R.id.A2);
+        buttonASharp2 = (Button) findViewById(R.id.ASharp2);
+        buttonB2 = (Button) findViewById(R.id.B2);
+
+        buttonC3 = (Button) findViewById(R.id.C3);
+        buttonCSharp3 = (Button) findViewById(R.id.CSharp3);
+        buttonD3 = (Button) findViewById(R.id.D3);
+        buttonDSharp3 = (Button) findViewById(R.id.DSharp3);
+        buttonE3 = (Button) findViewById(R.id.E3);
+        buttonF3 = (Button) findViewById(R.id.F3);
+        buttonFSharp3 = (Button) findViewById(R.id.FSharp3);
+        buttonG3 = (Button) findViewById(R.id.G3);
+        buttonGSharp3 = (Button) findViewById(R.id.GSharp3);
+        buttonA3 = (Button) findViewById(R.id.A3);
+        buttonASharp3 = (Button) findViewById(R.id.ASharp3);
+        buttonB3 = (Button) findViewById(R.id.B3);
+        buttonC4 = (Button) findViewById(R.id.C4);
+
+
+        register(R.id.C2);
+        register(R.id.CSharp2);
+        register(R.id.D2);
+        register(R.id.DSharp2);
+        register(R.id.E2);
+        register(R.id.F2);
+        register(R.id.FSharp2);
+        register(R.id.G2);
+        register(R.id.GSharp2);
+        register(R.id.A2);
+        register(R.id.ASharp2);
+        register(R.id.B2);
 
         register(R.id.C3);
         register(R.id.CSharp3);
@@ -155,8 +183,9 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         if (loaded)
         {
             /*String IdAsString = v.getResources().getResourceName(v.getId());
-            String newId = IdAsString.substring(21);
-            Log.d("1", "ID = "+newId);
+            String noteName = IdAsString.substring(21);
+            Log.d("1", "ID = "+noteName);
+            String buttonName = "button" + noteName
             buttonPress(event, buttonC2, c2);*/
 
             switch(v.getId()){
@@ -182,57 +211,89 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                     buttonPress(event, buttonDSharp2, dSharp2);
                     break;
 
+                case R.id.E2:
+                    buttonPress(event, buttonE2, e2);
+                    break;
+
+                case R.id.F2:
+                    buttonPress(event, buttonF2, f2);
+                    break;
+
+                case R.id.FSharp2:
+                    buttonPress(event, buttonFSharp2, fSharp2);
+                    break;
+
+                case R.id.G2:
+                    buttonPress(event, buttonG2, g2);
+                    break;
+
+                case R.id.GSharp2:
+                    buttonPress(event, buttonGSharp2, gSharp2);
+                    break;
+
+                case R.id.A2:
+                    buttonPress(event, buttonA2, a2);
+                    break;
+
+                case R.id.ASharp2:
+                    buttonPress(event, buttonASharp2, aSharp2);
+                    break;
+
+                case R.id.B2:
+                    buttonPress(event, buttonB2, b2);
+                    break;
+
                 case R.id.C3:
 
-                    buttonPress(event, buttonC, c);
+                    buttonPress(event, buttonC3, c3);
                     break;
 
                 case R.id.CSharp3:
-                    buttonPress(event, buttonCSharp, cSharp);
+                    buttonPress(event, buttonCSharp3, cSharp3);
                     break;
 
                 case R.id.D3:
-                    buttonPress(event, buttonD, d);
+                    buttonPress(event, buttonD3, d3);
                     break;
 
                 case R.id.DSharp3:
-                    buttonPress(event, buttonDSharp, dSharp);
+                    buttonPress(event, buttonDSharp3, dSharp3);
                     break;
 
                 case R.id.E3:
-                    buttonPress(event, buttonE, e);
+                    buttonPress(event, buttonE3, e3);
                     break;
 
                 case R.id.F3:
-                    buttonPress(event, buttonF, f);
+                    buttonPress(event, buttonF3, f3);
                     break;
 
                 case R.id.FSharp3:
-                    buttonPress(event, buttonFSharp, fSharp);
+                    buttonPress(event, buttonFSharp3, fSharp3);
                     break;
 
                 case R.id.G3:
-                    buttonPress(event, buttonG, g);
+                    buttonPress(event, buttonG3, g3);
                     break;
 
                 case R.id.GSharp3:
-                    buttonPress(event, buttonGSharp, gSharp);
+                    buttonPress(event, buttonGSharp3, gSharp3);
                     break;
 
                 case R.id.A3:
-                    buttonPress(event, buttonA, a);
+                    buttonPress(event, buttonA3, a3);
                     break;
 
                 case R.id.ASharp3:
-                    buttonPress(event, buttonASharp, aSharp);
+                    buttonPress(event, buttonASharp3, aSharp3);
                     break;
 
                 case R.id.B3:
-                    buttonPress(event, buttonB, b);
+                    buttonPress(event, buttonB3, b3);
                     break;
 
                 case R.id.C4:
-                    buttonPress(event, buttonC8Va, c8va);
+                    buttonPress(event, buttonC4, c4);
                     break;
             }
         }
@@ -251,6 +312,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
                 int streamId = soundPool.play(soundId, volume, volume, 1, -1, 1f);
+                // associate button with current sound
                 soundMap.put(button, streamId);
                 Log.d("1", "ID ="+ streamId);
                 button.setPressed(true);
@@ -258,7 +320,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
             case MotionEvent.ACTION_MOVE:
             {
-                TouchHandler(event, button);
+                AfterTouchHandler(event, button);
                 break;
             }
 
@@ -266,7 +328,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             case MotionEvent.ACTION_UP:
                 button.setPressed(false);
                 releaseDelay(soundMap.get(button));
-
                 break;
         }
         return true;
@@ -274,11 +335,11 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
 
-    public void TouchHandler(MotionEvent event, Button button)
+    public void AfterTouchHandler(MotionEvent event, Button button)
     {
         if (pitchAft)
         {
-            float pitch = (float)(volumeConverter(event.getY()) -0.6) /10 + 1;
+            float pitch = (float)(volumeConverter(event.getY()) -0.6) /20 + 1;
             Log.d("1", "Pitch = " + pitch);
             soundPool.setRate(soundMap.get(button), pitch);
         }
@@ -313,32 +374,57 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     public void loadSounds(String instrument)
     {
         int resId;
+        resId = getResId(instrument, "c2");
+        c2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "csharp2");
+        cSharp2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "d2");
+        d2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "dsharp2");
+        dSharp2 = soundPool.load(this,resId, 1);
+        resId = getResId(instrument, "e2");
+        e2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "f2");
+        f2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "fsharp2");
+        fSharp2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "g2");
+        g2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "gsharp2");
+        gSharp2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "a2");
+        a2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "asharp2");
+        aSharp2 = soundPool.load(this, resId, 1);
+        resId = getResId(instrument, "b2");
+        b2 = soundPool.load(this, resId, 1);
+
         resId = getResId(instrument, "c3");
-        c = soundPool.load(this, resId, 1);
+        c3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "csharp3");
-        cSharp = soundPool.load(this, resId, 1);
+        cSharp3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "d3");
-        d = soundPool.load(this, resId, 1);
+        d3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "dsharp3");
-        dSharp = soundPool.load(this,resId, 1);
+        dSharp3 = soundPool.load(this,resId, 1);
         resId = getResId(instrument, "e3");
-        e = soundPool.load(this, resId, 1);
+        e3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "f3");
-        f = soundPool.load(this, resId, 1);
+        f3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "fsharp3");
-        fSharp = soundPool.load(this, resId, 1);
+        fSharp3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "g3");
-        g = soundPool.load(this, resId, 1);
+        g3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "gsharp3");
-        gSharp = soundPool.load(this, resId, 1);
+        gSharp3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "a3");
-        a = soundPool.load(this, resId, 1);
+        a3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "asharp3");
-        aSharp = soundPool.load(this, resId, 1);
+        aSharp3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "b3");
-        b = soundPool.load(this, resId, 1);
+        b3 = soundPool.load(this, resId, 1);
         resId = getResId(instrument, "c4");
-        c8va = soundPool.load(this, resId, 1);
+        c4 = soundPool.load(this, resId, 1);
     }
 
     public int getResId(String instrument, String note)
@@ -354,6 +440,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     // account for variable note release timing
     public void releaseDelay(final int streamId)
     {
+
+        // TODO Fade out over x amount of time
         Handler handler = new Handler();
         handler.postDelayed(new Runnable()
         {
