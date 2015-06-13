@@ -35,6 +35,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     }
 
-    private float logScale(float value) {
+    private float logScale(float value)
+    {
         //make a logarithmic scale based on value from seekbar
         return(float) (LOG_MIN+(value-SEEKBAR_MIN)*(LOG_MAX - LOG_MIN)/(SEEKBAR_MAX-SEEKBAR_MIN));
     }
@@ -96,8 +98,9 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     }
 
-    // Simple Aftertouch Toggle controller
-    public void onToggleClicked(View view) {
+    // Aftertouch Toggle controller
+    public void onToggleClicked(View view)
+    {
         boolean on = ((ToggleButton) view).isChecked();
 
         if (on)
@@ -109,7 +112,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
-    private void register(int buttonResourceId){
+    private void register(int buttonResourceId)
+    {
         findViewById(buttonResourceId).setOnTouchListener(this);
     }
 
@@ -306,9 +310,14 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         float volume;
 
+
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
+                //prevent scrolling while a key is being held down
+                ((LockableScrollView)findViewById(R.id.horizontalScrollView)).setScrollingEnabled(false);
+
+
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
                 int streamId = soundPool.play(soundId, volume, volume, 1, -1, 1f);
@@ -316,6 +325,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 soundMap.put(button, streamId);
                 Log.d("1", "ID ="+ streamId);
                 button.setPressed(true);
+
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -327,6 +337,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
                 button.setPressed(false);
+                // allow scrolling after release again
+                ((LockableScrollView)findViewById(R.id.horizontalScrollView)).setScrollingEnabled(true);
                 releaseDelay(soundMap.get(button));
                 break;
         }
