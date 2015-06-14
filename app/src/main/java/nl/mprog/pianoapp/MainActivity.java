@@ -22,15 +22,13 @@ import java.util.HashMap;
 
 public class MainActivity extends Activity implements View.OnTouchListener {
 
-    private SoundPool soundPool;
-    private int c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4;
-    private boolean loaded = false;
     private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4;
-    private boolean loopable = true, pitchAft = false;
+    private boolean pitchAft = false;
     private int releaseTime = 0;
     private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
-    private HashMap<Button, Integer> soundMap = new HashMap<>();
+    public static String PACKAGE_NAME;
+    private SoundBank soundBank;
 
 
 
@@ -40,21 +38,13 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PACKAGE_NAME = getApplicationContext().getPackageName();
 
 
+        soundBank = new SoundBank(getApplicationContext());
+        soundBank.setInstrument("square");
+        soundBank.loadSounds(PACKAGE_NAME);
 
-        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
-
-        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener()
-        {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int sampleId,
-                                       int status) {
-                loaded = true;
-            }
-        });
-
-        loadSounds("square");
         initButtons();
         modWheelSetup();
 
@@ -118,7 +108,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
-
+    // assign buttons with onTouchListener
     public void initButtons(){
 
         buttonC2 = (Button) findViewById(R.id.C2);
@@ -184,7 +174,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     public boolean onTouch(View v, MotionEvent event)
     {
 
-        if (loaded)
+        if (soundBank.loaded())
         {
             /*String IdAsString = v.getResources().getResourceName(v.getId());
             String noteName = IdAsString.substring(21);
@@ -194,110 +184,109 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
             switch(v.getId()){
 
-
                 case R.id.C2:
 
-                    buttonPress(event, buttonC2, c2);
+                    buttonPress(event, buttonC2, soundBank.c2);
                     break;
 
                 case R.id.CSharp2:
 
-                    buttonPress(event, buttonCSharp2, cSharp2);
+                    buttonPress(event, buttonCSharp2, soundBank.cSharp2);
                     break;
 
                 case R.id.D2:
 
-                    buttonPress(event, buttonD2, d2);
+                    buttonPress(event, buttonD2, soundBank.d2);
                     break;
 
                 case R.id.DSharp2:
 
-                    buttonPress(event, buttonDSharp2, dSharp2);
+                    buttonPress(event, buttonDSharp2, soundBank.dSharp2);
                     break;
 
                 case R.id.E2:
-                    buttonPress(event, buttonE2, e2);
+                    buttonPress(event, buttonE2, soundBank.e2);
                     break;
 
                 case R.id.F2:
-                    buttonPress(event, buttonF2, f2);
+                    buttonPress(event, buttonF2, soundBank.f2);
                     break;
 
                 case R.id.FSharp2:
-                    buttonPress(event, buttonFSharp2, fSharp2);
+                    buttonPress(event, buttonFSharp2, soundBank.fSharp2);
                     break;
 
                 case R.id.G2:
-                    buttonPress(event, buttonG2, g2);
+                    buttonPress(event, buttonG2, soundBank.g2);
                     break;
 
                 case R.id.GSharp2:
-                    buttonPress(event, buttonGSharp2, gSharp2);
+                    buttonPress(event, buttonGSharp2, soundBank.gSharp2);
                     break;
 
                 case R.id.A2:
-                    buttonPress(event, buttonA2, a2);
+                    buttonPress(event, buttonA2, soundBank.a2);
                     break;
 
                 case R.id.ASharp2:
-                    buttonPress(event, buttonASharp2, aSharp2);
+                    buttonPress(event, buttonASharp2, soundBank.aSharp2);
                     break;
 
                 case R.id.B2:
-                    buttonPress(event, buttonB2, b2);
+                    buttonPress(event, buttonB2, soundBank.b2);
                     break;
 
                 case R.id.C3:
 
-                    buttonPress(event, buttonC3, c3);
+                    buttonPress(event, buttonC3, soundBank.c3);
                     break;
 
                 case R.id.CSharp3:
-                    buttonPress(event, buttonCSharp3, cSharp3);
+                    buttonPress(event, buttonCSharp3, soundBank.cSharp3);
                     break;
 
                 case R.id.D3:
-                    buttonPress(event, buttonD3, d3);
+                    buttonPress(event, buttonD3, soundBank.d3);
                     break;
 
                 case R.id.DSharp3:
-                    buttonPress(event, buttonDSharp3, dSharp3);
+                    buttonPress(event, buttonDSharp3, soundBank.dSharp3);
                     break;
 
                 case R.id.E3:
-                    buttonPress(event, buttonE3, e3);
+                    buttonPress(event, buttonE3, soundBank.e3);
                     break;
 
                 case R.id.F3:
-                    buttonPress(event, buttonF3, f3);
+                    buttonPress(event, buttonF3, soundBank.f3);
                     break;
 
                 case R.id.FSharp3:
-                    buttonPress(event, buttonFSharp3, fSharp3);
+                    buttonPress(event, buttonFSharp3, soundBank.fSharp3);
                     break;
 
                 case R.id.G3:
-                    buttonPress(event, buttonG3, g3);
+                    buttonPress(event, buttonG3, soundBank.g3);
                     break;
 
                 case R.id.GSharp3:
-                    buttonPress(event, buttonGSharp3, gSharp3);
+                    buttonPress(event, buttonGSharp3, soundBank.gSharp3);
                     break;
 
                 case R.id.A3:
-                    buttonPress(event, buttonA3, a3);
+                    buttonPress(event, buttonA3, soundBank.a3);
                     break;
 
                 case R.id.ASharp3:
-                    buttonPress(event, buttonASharp3, aSharp3);
+                    buttonPress(event, buttonASharp3, soundBank.aSharp3);
                     break;
 
                 case R.id.B3:
-                    buttonPress(event, buttonB3, b3);
+                    buttonPress(event, buttonB3, soundBank.b3);
                     break;
 
                 case R.id.C4:
-                    buttonPress(event, buttonC4, c4);
+                    buttonPress(event, buttonC4, soundBank.c4);
                     break;
             }
         }
@@ -310,7 +299,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         float volume;
 
-
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
@@ -320,9 +308,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
-                int streamId = soundPool.play(soundId, volume, volume, 1, -1, 1f);
+                //int streamId = soundPool.play(soundId, volume, volume, 1, -1, 1f);
+                int streamId = soundBank.playSound(soundId, volume);
                 // associate button with current sound
-                soundMap.put(button, streamId);
+                soundBank.mapStream(button, streamId);
                 Log.d("1", "ID ="+ streamId);
                 button.setPressed(true);
 
@@ -339,7 +328,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 button.setPressed(false);
                 // allow scrolling after release again
                 ((LockableScrollView)findViewById(R.id.horizontalScrollView)).setScrollingEnabled(true);
-                releaseDelay(soundMap.get(button));
+                releaseDelay(soundBank.getStream(button));
                 break;
         }
         return true;
@@ -353,12 +342,12 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         {
             float pitch = (float)(volumeConverter(event.getY()) -0.6) /20 + 1;
             Log.d("1", "Pitch = " + pitch);
-            soundPool.setRate(soundMap.get(button), pitch);
+            soundBank.setPitch(soundBank.getStream(button), pitch);
         }
         else
         {
             float volume2 = volumeConverter(event.getY());
-            soundPool.setVolume(soundMap.get(button), volume2, volume2);
+            soundBank.setVolume(soundBank.getStream(button), volume2);
         }
     }
 
@@ -366,12 +355,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     // temporary solution to infinitely looping sounds
     public void onSoundKill(View view)
     {
-        // pause all sounds currently playing and stop
-        soundPool.autoPause();
-        for (int value : soundMap.values())
-        {
-            soundPool.stop(value);
-        }
+        soundBank.stopAllSounds();
     }
 
 
@@ -379,74 +363,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     {
         return (yCoordinates + 200)/1000;
     }
-
-
-
-
-    public void loadSounds(String instrument)
-    {
-        int resId;
-        resId = getResId(instrument, "c2");
-        c2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "csharp2");
-        cSharp2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "d2");
-        d2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "dsharp2");
-        dSharp2 = soundPool.load(this,resId, 1);
-        resId = getResId(instrument, "e2");
-        e2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "f2");
-        f2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "fsharp2");
-        fSharp2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "g2");
-        g2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "gsharp2");
-        gSharp2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "a2");
-        a2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "asharp2");
-        aSharp2 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "b2");
-        b2 = soundPool.load(this, resId, 1);
-
-        resId = getResId(instrument, "c3");
-        c3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "csharp3");
-        cSharp3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "d3");
-        d3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "dsharp3");
-        dSharp3 = soundPool.load(this,resId, 1);
-        resId = getResId(instrument, "e3");
-        e3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "f3");
-        f3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "fsharp3");
-        fSharp3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "g3");
-        g3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "gsharp3");
-        gSharp3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "a3");
-        a3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "asharp3");
-        aSharp3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "b3");
-        b3 = soundPool.load(this, resId, 1);
-        resId = getResId(instrument, "c4");
-        c4 = soundPool.load(this, resId, 1);
-    }
-
-    public int getResId(String instrument, String note)
-    {
-        String tempString = instrument + note;
-        return getResources().getIdentifier(tempString, "raw", getPackageName());
-    }
-
-
-
 
 
     // account for variable note release timing
@@ -460,7 +376,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             @Override
             public void run() {
                 Log.d("1", "Note released!");
-                soundPool.stop(streamId);
+                soundBank.stopSound(streamId);
             }
 
         }, releaseTime);
