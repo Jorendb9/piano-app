@@ -1,8 +1,10 @@
 package nl.mprog.pianoapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.media.audiofx.PresetReverb;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -23,12 +25,13 @@ import java.util.HashMap;
 public class MainActivity extends Activity implements View.OnTouchListener {
 
     private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4;
-    private boolean pitchAft = false;
+    private boolean playing = false, pitchAft = false;
     private int releaseTime = 0;
     private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
     public static String PACKAGE_NAME;
     private SoundBank soundBank;
+    private PresetReverb reverb;
 
 
 
@@ -39,6 +42,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PACKAGE_NAME = getApplicationContext().getPackageName();
+        reverb = new PresetReverb(1,0);
+        reverb.setPreset(PresetReverb.PRESET_LARGEROOM);
 
 
         soundBank = new SoundBank(getApplicationContext());
@@ -88,17 +93,13 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     }
 
-    // Aftertouch Toggle controller
-    public void onToggleClicked(View view)
+    public void onEffectsStart(View v)
     {
-        boolean on = ((ToggleButton) view).isChecked();
 
-        if (on)
-        {
-            pitchAft = true;
-        } else {
-            pitchAft = false;
-        }
+        reverb.setEnabled(true);
+
+        /*Intent i = new Intent(this, FXActivity.class);
+        startActivityForResult(i, 1);*/
     }
 
 
@@ -176,11 +177,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         if (soundBank.loaded())
         {
-            /*String IdAsString = v.getResources().getResourceName(v.getId());
-            String noteName = IdAsString.substring(21);
-            Log.d("1", "ID = "+noteName);
-            String buttonName = "button" + noteName
-            buttonPress(event, buttonC2, c2);*/
 
             switch(v.getId()){
 
@@ -302,10 +298,9 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
+
                 //prevent scrolling while a key is being held down
                 ((LockableScrollView)findViewById(R.id.horizontalScrollView)).setScrollingEnabled(false);
-
-
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
                 //int streamId = soundPool.play(soundId, volume, volume, 1, -1, 1f);
@@ -314,6 +309,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 soundBank.mapStream(button, streamId);
                 Log.d("1", "ID ="+ streamId);
                 button.setPressed(true);
+                playing = true;
 
                 break;
 
@@ -328,7 +324,14 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 button.setPressed(false);
                 // allow scrolling after release again
                 ((LockableScrollView)findViewById(R.id.horizontalScrollView)).setScrollingEnabled(true);
+                if (releaseTime > 10)
+                {
+                    soundBank.fadeOut(soundBank.getStream(button), 0.7f, releaseTime);
+
+                }
                 releaseDelay(soundBank.getStream(button));
+
+                playing = false;
                 break;
         }
         return true;
@@ -369,7 +372,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     public void releaseDelay(final int streamId)
     {
 
-        // TODO Fade out over x amount of time
         Handler handler = new Handler();
         handler.postDelayed(new Runnable()
         {
@@ -380,7 +382,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             }
 
         }, releaseTime);
-
     }
 
 
@@ -410,4 +411,11 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /*@Override
+    public void onStop()
+    {
+        soundBank.unloadAll();
+        super.onStop();
+    }*/
 }

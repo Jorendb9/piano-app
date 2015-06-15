@@ -18,27 +18,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/seekBar" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Aftertouch:"
-            android:id="@+id/textView"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/toggleButton"
-            android:layout_toStartOf="@+id/toggleButton" />
 
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Aftertouch"
-            android:id="@+id/toggleButton"
-            android:onClick="onToggleClicked"
-            android:textOn="Pitch"
-            android:textOff="Volume"
-            android:layout_marginRight="20dp"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/button"
-            android:layout_toStartOf="@+id/button" />
+
+
 
         <Button
             android:layout_width="wrap_content"
@@ -52,7 +34,15 @@
             android:id="@+id/button"
             android:layout_gravity="end" />
 
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FX"
+            android:id="@+id/button2"
+            android:onClick="onEffectsStart"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/button"
+            android:layout_toStartOf="@+id/button" />
 
 
     </RelativeLayout>

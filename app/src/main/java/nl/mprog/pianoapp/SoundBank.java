@@ -3,9 +3,12 @@ package nl.mprog.pianoapp;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class SoundBank {
@@ -29,7 +32,6 @@ public class SoundBank {
                                        int status)
             {
                 loaded = true;
-                Log.d("1", "load succesful!");
             }
         });
 
@@ -153,5 +155,60 @@ public class SoundBank {
         return loaded;
     }
 
+    public void fadeOut(final int streamId, final float initVolume, int releaseTime)
+    {
+        final int steps = 100;
+        final long timeStep = (long)releaseTime/100;
+        final float volumeStep = initVolume/100;
 
+
+        /*for (int i = 0; i <= steps; i++)
+        {
+            soundPool.setVolume(streamId, initVolume, initVolume);
+            initVolume =- volumeStep;
+            delay(timeStep);
+        }
+        soundPool.stop(streamId);*/
+
+        for (int i = 0; i <= steps; i++)
+        {
+            final int j = i;
+            new Handler().postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+
+                    float tempVolume = initVolume - j*volumeStep;
+                    soundPool.setVolume(streamId, tempVolume, tempVolume);
+
+                }
+            }, timeStep);
+        }
+        soundPool.stop(streamId);
+    }
+
+
+    public void delay (final long time)
+    {
+        /*Handler handler = new Handler();
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+
+            }
+        }, time);*/
+
+    }
+
+
+
+
+
+    public void unloadAll()
+    {
+        soundPool.release();
+    }
 }
