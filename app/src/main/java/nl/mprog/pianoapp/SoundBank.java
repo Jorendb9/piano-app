@@ -3,6 +3,7 @@ package nl.mprog.pianoapp;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
@@ -18,6 +19,7 @@ public class SoundBank {
     private Context ctx;
     private Boolean loaded = false;
     private HashMap<Button, Integer> soundMap = new HashMap<>();
+    private FadeOutTimer fadeOutTimer;
 
     public int c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4;
 
@@ -157,58 +159,57 @@ public class SoundBank {
 
     public void fadeOut(final int streamId, final float initVolume, int releaseTime)
     {
-        final int steps = 100;
-        final long timeStep = (long)releaseTime/100;
-        final float volumeStep = initVolume/100;
+        int steps = 100;
+        long timeStep = (long)releaseTime/steps;
+        float volumeStep = initVolume/steps;
 
 
-        /*for (int i = 0; i <= steps; i++)
-        {
-            soundPool.setVolume(streamId, initVolume, initVolume);
-            initVolume =- volumeStep;
-            delay(timeStep);
-        }
-        soundPool.stop(streamId);*/
-
-        for (int i = 0; i <= steps; i++)
-        {
-            final int j = i;
-            new Handler().postDelayed(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-
-                    float tempVolume = initVolume - j*volumeStep;
-                    soundPool.setVolume(streamId, tempVolume, tempVolume);
-
-                }
-            }, timeStep);
-        }
-        soundPool.stop(streamId);
-    }
-
-
-    public void delay (final long time)
-    {
-        /*Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-
-            }
-        }, time);*/
+        fadeOutTimer = new FadeOutTimer(releaseTime, timeStep, streamId, volumeStep, initVolume);
+        fadeOutTimer.start();
 
     }
-
-
 
 
 
     public void unloadAll()
     {
         soundPool.release();
+    }
+
+
+
+
+    // timer class for gradual fadeout
+    public class FadeOutTimer extends CountDownTimer
+    {
+        private int id;
+        private float step, volume;
+        public FadeOutTimer(long startTime, long interval, int streamId, float volumeStep, float initVolume)
+        {
+            super(startTime, interval);
+            id = streamId;
+            step = volumeStep;
+            volume = initVolume;
+            Log.d("1", "Timer set");
+        }
+
+        @Override
+        public void onFinish()
+        {
+            soundPool.stop(id);
+            Log.d("1", "Timer finished");
+        }
+
+
+        @Override
+        public void onTick(long millisUntilFinished)
+        {
+
+            soundPool.setVolume(id, volume, volume);
+            volume = volume - step;
+            Log.d("1", "volume = " + volume);
+
+        }
+
     }
 }

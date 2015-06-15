@@ -5,9 +5,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
 
-/**
- * Created by PC on 13-6-2015.
- */
+
 public class LockableScrollView extends HorizontalScrollView {
 
     public LockableScrollView(Context context, AttributeSet attrs, int defStyle) {
@@ -24,44 +22,12 @@ public class LockableScrollView extends HorizontalScrollView {
         super(context);
     }
 
-    // true if we can scroll (not locked)
-    // false if we cannot scroll (locked)
-    private boolean mScrollable = true;
 
-    public void setScrollingEnabled(boolean enabled) {
-        mScrollable = enabled;
-    }
-
-    public boolean isScrollable() {
-        return mScrollable;
-    }
-
+    // prevent scrollview from intercepting button presses
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                // if we can scroll pass the event to the superclass
-                if (mScrollable) return super.onTouchEvent(ev);
-                // only continue to handle the touch event if scrolling enabled
-                return mScrollable; // mScrollable is always false at this point
-            default:
-                return super.onTouchEvent(ev);
-        }
-    }
-
-
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                // if we can scroll pass the event to the superclass
-                if (mScrollable) return super.onInterceptTouchEvent(ev);
-                // only continue to handle the touch event if scrolling enabled
-                return mScrollable; // mScrollable is always false at this point
-            default:
-                return super.onInterceptTouchEvent(ev);
-        }
+    public boolean onInterceptTouchEvent(MotionEvent ev)
+    {
+        return false;
     }
 
 }

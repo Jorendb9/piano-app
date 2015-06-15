@@ -299,8 +299,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         {
             case MotionEvent.ACTION_DOWN:
 
-                //prevent scrolling while a key is being held down
-                ((LockableScrollView)findViewById(R.id.horizontalScrollView)).setScrollingEnabled(false);
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
                 //int streamId = soundPool.play(soundId, volume, volume, 1, -1, 1f);
@@ -322,8 +320,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
                 button.setPressed(false);
-                // allow scrolling after release again
-                ((LockableScrollView)findViewById(R.id.horizontalScrollView)).setScrollingEnabled(true);
                 if (releaseTime > 10)
                 {
                     soundBank.fadeOut(soundBank.getStream(button), 0.7f, releaseTime);
