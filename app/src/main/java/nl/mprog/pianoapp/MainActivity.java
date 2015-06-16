@@ -208,6 +208,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         aSharp3 = new Note(buttonList.get(22), soundBank.aSharp3, soundPool);
         b3 = new Note(buttonList.get(23), soundBank.b3, soundPool);
         c4 = new Note(buttonList.get(24), soundBank.c4, soundPool);
+
+        noteList = new ArrayList<>(Arrays.asList(c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4));
     }
 
 
@@ -335,7 +337,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     public boolean buttonPress(MotionEvent event, Note note)
     {
 
-        float volume = 0.7f;
+        float volume;
 
         switch (event.getAction())
         {
@@ -362,6 +364,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             case MotionEvent.ACTION_UP:
                 note.getTrigger().setPressed(false);
                 note.release();
+                releaseDelay(note);
                 break;
         }
         return true;
@@ -414,7 +417,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
     // account for variable note release timing
-    public void releaseDelay(final int streamId)
+    public void releaseDelay(final Note note)
     {
 
         Handler handler = new Handler();
@@ -423,7 +426,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             @Override
             public void run() {
                 Log.d("1", "Note released!");
-                soundBank.stopSound(streamId);
+                note.stop();
             }
 
         }, releaseTime);

@@ -3,6 +3,7 @@ package nl.mprog.pianoapp;
 
 import android.media.SoundPool;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 
@@ -16,12 +17,15 @@ public class Note
     final static String TAG = "Note";
     FadeOutTimer fadeOutTimer;
     private Boolean playing = false;
+    int i = 0;
+
 
     public Note(Button button, int soundId, SoundPool sounds)
     {
         trigger = button;
         id = soundId;
         soundPool = sounds;
+
     }
 
     public void setEnvelope(int Attack, int Decay, int Sustain, int Release)
@@ -31,6 +35,8 @@ public class Note
         s = Sustain;
         r = Release;
     }
+
+
 
     public void play(float volume)
     {
@@ -58,7 +64,7 @@ public class Note
 
     public void setPitch(float pitch)
     {
-        soundPool.setRate(stream, pitch) ;
+        soundPool.setRate(stream, pitch);
     }
 
     public void setVolume(float volume)
@@ -73,14 +79,31 @@ public class Note
 
     public void release()
     {
-        long timeStep = (long)r/STEPS;
-        float volumeStep = initialVolume/STEPS;
-        fadeOutTimer = new FadeOutTimer(r, timeStep, id, volumeStep, initialVolume);
+        i = 0;
+        final long timeStep = (long)r/STEPS;
+        final float volumeStep = initialVolume/STEPS;
+        Log.d(TAG, "Timestep= " + timeStep);
+        /*fadeOutTimer = new FadeOutTimer(r, timeStep, volumeStep, initialVolume);
         fadeOutTimer.start();
         if (fadeOutTimer.checkFinished())
         {
             soundPool.stop(stream);
-        }
+        }*/
+
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run()
+            {
+                soundPool.setVolume(id, (initialVolume-(volumeStep*i)), (initialVolume-(volumeStep*i)));
+                i++;
+                Log.d(TAG, "volume= " + (initialVolume-(volumeStep*i)));
+                Log.d(TAG, "iterator= " + i);
+                handler.postDelayed(this, timeStep);
+            }
+        });
+        soundPool.stop(stream);
+        Log.d(TAG, "finished");
     }
 
     public int id()
@@ -88,17 +111,20 @@ public class Note
         return id;
     }
 
+
+
+
+
+
     // timer class for gradual fading
     public class FadeOutTimer extends CountDownTimer
     {
-        private int noteId;
         private float step, volume;
         public boolean finished;
-        public FadeOutTimer(long startTime, long interval, int streamId, float volumeStep, float initVolume)
+        public FadeOutTimer(long startTime, long interval, float volumeStep, float initVolume)
         {
             super(startTime, interval);
             finished = false;
-            noteId = streamId;
             step = volumeStep;
             volume = initVolume;
             Log.d("1", "Timer set");
@@ -107,7 +133,7 @@ public class Note
         @Override
         public void onFinish()
         {
-            soundPool.stop(noteId);
+            soundPool.stop(id);
             Log.d("1", "Timer finished");
             finished = true;
         }
@@ -122,9 +148,8 @@ public class Note
         public void onTick(long millisUntilFinished)
         {
 
-            soundPool.setVolume(noteId, volume, volume);
+            soundPool.setVolume(id, volume, volume);
             volume = volume - step;
-
             Log.d("1", "volume = " + volume);
         }
     }
