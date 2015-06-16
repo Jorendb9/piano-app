@@ -67,5 +67,50 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="220dp"
+        android:layout_toRightOf="@id/LinearLayout"
+        android:layout_toEndOf="@id/LinearLayout"
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout2">
+
+        <nl.mprog.pianoapp.VerticalSeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"
+            android:id="@+id/attackBar"/>
+
+        <nl.mprog.pianoapp.VerticalSeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"
+            android:id="@+id/decayBar"/>
+
+        <nl.mprog.pianoapp.VerticalSeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"
+            android:id="@+id/sustainBar"/>
+
+        <nl.mprog.pianoapp.VerticalSeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:id="@+id/releaseBar"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/seekBarValue"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_alignLeft="@+id/linearLayout2"
+        android:layout_alignStart="@+id/linearLayout2" />
+
 
 </RelativeLayout>

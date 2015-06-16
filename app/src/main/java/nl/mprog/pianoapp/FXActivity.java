@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.media.audiofx.PresetReverb;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 
@@ -16,6 +19,9 @@ public class FXActivity extends ActionBarActivity {
 
     private String afterTouch, modWheel;
     private Spinner spinnerAft, spinnerMod;
+    private int release;
+    VerticalSeekBar attackBar, decayBar, sustainBar, releaseBar;
+    TextView seekBarValue;
 
 
 
@@ -26,9 +32,42 @@ public class FXActivity extends ActionBarActivity {
         spinnerMod=(Spinner) findViewById(R.id.spinnerMod);
         spinnerAft=(Spinner) findViewById(R.id.spinnerAft);
 
+        seekBarValue = (TextView) findViewById(R.id.seekBarValue);
+
+        setupSeekBars();
 
 
+    }
 
+    public void setupSeekBars()
+    {
+        attackBar = (VerticalSeekBar) findViewById(R.id.attackBar);
+        decayBar = (VerticalSeekBar) findViewById(R.id.decayBar);
+        sustainBar = (VerticalSeekBar) findViewById(R.id.sustainBar);
+        releaseBar = (VerticalSeekBar) findViewById(R.id.releaseBar);
+
+        releaseBar.setMax(5000);
+
+        releaseBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                seekBarValue.setText(String.valueOf(progress));
+                release = progress;
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+        });
     }
 
 
@@ -50,11 +89,13 @@ public class FXActivity extends ActionBarActivity {
         finishActivity();
     }
 
+
     public void finishActivity()
     {
         afterTouch = spinnerAft.getSelectedItem().toString();
         modWheel = spinnerMod.getSelectedItem().toString();
         Intent returnIntent = new Intent();
+        returnIntent.putExtra("release", release);
         returnIntent.putExtra("afterTouch",afterTouch);
         returnIntent.putExtra("modWheel",modWheel);
         setResult(RESULT_OK,returnIntent);
