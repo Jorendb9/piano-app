@@ -27,8 +27,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4;
     private boolean playing = false, pitchAft = false;
-    private String aftSelect = "Volume";
-    private int releaseTime = 0;
+    private String aftSelect = "Pitch", modSelect = "Attack";
+    private int releaseTime = 0, attackTime = 0;
     private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
     public static String PACKAGE_NAME;
@@ -75,7 +75,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
@@ -84,11 +83,20 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
                 float temp = seekBar.getProgress();
-                releaseTime = (int)(1000 * logScale(temp));
-                Log.d("1", "Release Time (ms) = "+releaseTime);
+                if (modSelect.equals("Attack"))
+                {
+                    attackTime = (int) (1000 * logScale(temp));
+                    Log.d("1", "Attack Time (ms) = " + attackTime);
+                }
+                else if (modSelect.equals("Release"))
+                {
+                    releaseTime = (int) (1000 * logScale(temp));
+                    Log.d("1", "Release Time (ms) = " + releaseTime);
+                }
+
+
             }
         });
-
 
     }
 
@@ -106,7 +114,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
-    // assign buttons with onTouchListener
+    // assign buttons to onTouchListener
     public void initButtons(){
 
         buttonC2 = (Button) findViewById(R.id.C2);
@@ -290,7 +298,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     public boolean buttonPress(MotionEvent event, Button button, int soundId)
     {
 
-        float volume;
+        float volume = 0.7f;
 
         switch (event.getAction())
         {
@@ -298,11 +306,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
-                //int streamId = soundPool.play(soundId, volume, volume, 1, -1, 1f);
-                int streamId = soundBank.playSound(soundId, volume);
-                // associate button with current sound
+                int streamId = soundBank.playSound(soundId, 0);
                 soundBank.mapStream(button, streamId);
-                Log.d("1", "ID ="+ streamId);
+                soundBank.fadeIn(streamId, volume, attackTime);
+                Log.d("1", "ID =" + streamId);
                 button.setPressed(true);
                 playing = true;
 
@@ -317,10 +324,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
                 button.setPressed(false);
+                soundBank.interruptTimer();
                 if (releaseTime > 10)
                 {
-                    soundBank.fadeOut(soundBank.getStream(button), 0.7f, releaseTime);
-
+                    soundBank.fadeOut(soundBank.getStream(button), volume, releaseTime);
                 }
                 releaseDelay(soundBank.getStream(button));
 
@@ -335,6 +342,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
                 aftSelect = data.getStringExtra("afterTouch");
+                modSelect = data.getStringExtra("modWheel");
+                releaseTime = (int)(1000 * logScale(data.getIntExtra("release", 0)));
             }
             if (resultCode == RESULT_CANCELED) {
                 Log.d("1", "no result");
@@ -346,20 +355,17 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     public void AfterTouchHandler(MotionEvent event, Button button)
     {
-        switch (aftSelect)
-        {
-            case "Pitch":
-            {
-                float pitch = (float)(volumeConverter(event.getY()) -0.6) /20 + 1;
-                Log.d("1", "Pitch = " + pitch);
-                soundBank.setPitch(soundBank.getStream(button), pitch);
 
-            }
-            case "Volume":
-            {
-                float volume2 = volumeConverter(event.getY());
-                soundBank.setVolume(soundBank.getStream(button), volume2);
-            }
+        if (aftSelect.equals("Pitch"))
+        {
+            float pitch = (float)(volumeConverter(event.getY()) -0.6) /20 + 1;
+            Log.d("1", "Pitch = " + pitch);
+            soundBank.setPitch(soundBank.getStream(button), pitch);
+        }
+        else if (aftSelect.equals("Volume"))
+        {
+            float volume2 = volumeConverter(event.getY());
+            soundBank.setVolume(soundBank.getStream(button), volume2);
         }
     }
 
