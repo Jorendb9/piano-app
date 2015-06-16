@@ -1,26 +1,31 @@
 package nl.mprog.pianoapp;
 
+import android.content.Intent;
 import android.media.audiofx.PresetReverb;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.ToggleButton;
 
 
 public class FXActivity extends ActionBarActivity {
 
-    boolean reverbSwitch;
-    PresetReverb reverb;
+    private String afterTouch, modWheel;
+    private Spinner spinnerAft, spinnerMod;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fx);
+        spinnerMod=(Spinner) findViewById(R.id.spinnerMod);
+        spinnerAft=(Spinner) findViewById(R.id.spinnerAft);
 
-        reverb = new PresetReverb(1,0);
-        reverb.setPreset(PresetReverb.PRESET_LARGEROOM);
 
 
 
@@ -34,11 +39,25 @@ public class FXActivity extends ActionBarActivity {
         return true;
     }
 
-    // Aftertouch Toggle controller
-    public void onToggleClicked(View view)
+    public void onBack(View view)
     {
-        reverbSwitch = ((ToggleButton) view).isChecked();
-        reverb.setEnabled(true);
+        finishActivity();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        finishActivity();
+    }
+
+    public void finishActivity()
+    {
+        afterTouch = spinnerAft.getSelectedItem().toString();
+        modWheel = spinnerMod.getSelectedItem().toString();
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("afterTouch",afterTouch);
+        returnIntent.putExtra("modWheel",modWheel);
+        setResult(RESULT_OK,returnIntent);
         finish();
     }
 

@@ -7,14 +7,65 @@
     tools:context="nl.mprog.pianoapp.FXActivity">
 
 
-    <ToggleButton
+    <LinearLayout
+        android:layout_width="300dp"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/LinearLayout"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Mod Wheel"
+            android:id="@+id/textView"
+            android:textSize="20sp"
+            android:layout_weight="1"/>
+
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerMod"
+            android:entries="@array/modWheel"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LinearLayout"
+        android:layout_marginTop="30dp"
+        android:padding="5dp"
+        android:id="@+id/linearLayout">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Aftertouch"
+            android:id="@+id/textView2"
+            android:textSize="20sp"
+            android:layout_weight="1"/>
+
+
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerAft"
+            android:entries="@array/afterTouch"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reverb"
-        android:id="@+id/ReverbToggle"
-        android:onClick="onToggleClicked"
-        android:textOn="Reverb On"
-        android:textOff="Reverb Off"
-        android:layout_marginRight="20dp"
-        android:layout_alignParentTop="true" />
+        android:text="Back"
+        android:id="@+id/button3"
+        android:onClick="onBack"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
 </RelativeLayout>

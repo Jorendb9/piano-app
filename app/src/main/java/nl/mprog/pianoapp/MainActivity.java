@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.ToggleButton;
 
 import java.util.HashMap;
@@ -26,12 +27,12 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4;
     private boolean playing = false, pitchAft = false;
+    private String aftSelect = "Volume";
     private int releaseTime = 0;
     private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
     public static String PACKAGE_NAME;
     private SoundBank soundBank;
-    private PresetReverb reverb;
 
 
 
@@ -42,8 +43,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PACKAGE_NAME = getApplicationContext().getPackageName();
-        reverb = new PresetReverb(1,0);
-        reverb.setPreset(PresetReverb.PRESET_LARGEROOM);
 
 
         soundBank = new SoundBank(getApplicationContext());
@@ -96,10 +95,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     public void onEffectsStart(View v)
     {
 
-        reverb.setEnabled(true);
-
-        /*Intent i = new Intent(this, FXActivity.class);
-        startActivityForResult(i, 1);*/
+        Intent i = new Intent(this, FXActivity.class);
+        startActivityForResult(i, 1);
     }
 
 
@@ -333,25 +330,41 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         return true;
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
-    public void AfterTouchHandler(MotionEvent event, Button button)
-    {
-        if (pitchAft)
-        {
-            float pitch = (float)(volumeConverter(event.getY()) -0.6) /20 + 1;
-            Log.d("1", "Pitch = " + pitch);
-            soundBank.setPitch(soundBank.getStream(button), pitch);
-        }
-        else
-        {
-            float volume2 = volumeConverter(event.getY());
-            soundBank.setVolume(soundBank.getStream(button), volume2);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                aftSelect = data.getStringExtra("afterTouch");
+            }
+            if (resultCode == RESULT_CANCELED) {
+                Log.d("1", "no result");
+            }
         }
     }
 
 
-    // temporary solution to infinitely looping sounds
+
+    public void AfterTouchHandler(MotionEvent event, Button button)
+    {
+        switch (aftSelect)
+        {
+            case "Pitch":
+            {
+                float pitch = (float)(volumeConverter(event.getY()) -0.6) /20 + 1;
+                Log.d("1", "Pitch = " + pitch);
+                soundBank.setPitch(soundBank.getStream(button), pitch);
+
+            }
+            case "Volume":
+            {
+                float volume2 = volumeConverter(event.getY());
+                soundBank.setVolume(soundBank.getStream(button), volume2);
+            }
+        }
+    }
+
+
+
     public void onSoundKill(View view)
     {
         soundBank.stopAllSounds();

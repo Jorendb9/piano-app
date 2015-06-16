@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string-array name="modWheel">
+        <item>Release</item>
+        <item>Attack</item>
+        <item>Volume</item>
+        <item>Pitch</item>
+    </string-array>
+
+    <string-array name="afterTouch">
+        <item>Volume</item>
+        <item>Pitch</item>
+    </string-array>
+</resources>
