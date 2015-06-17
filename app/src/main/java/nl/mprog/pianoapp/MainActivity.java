@@ -270,6 +270,14 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
                 note.getTrigger().setPressed(true);
+
+                // prevent conflicts if the same note is already playing
+                if (note.isPlaying())
+                {
+                    Log.d(TAG, "already playing!");
+                    note.interrupt();
+                    note.stop();
+                }
                 note.play(volume);
 
                 break;
@@ -284,7 +292,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             case MotionEvent.ACTION_UP:
                 note.getTrigger().setPressed(false);
                 note.release();
-                releaseDelay(note);
+
                 break;
         }
         return true;

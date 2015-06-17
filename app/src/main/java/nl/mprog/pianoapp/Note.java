@@ -16,9 +16,8 @@ public class Note
     private String noteName;
     final static int STEPS = 100;
     final static String TAG = "Note";
-    FadeOutTimer fadeOutTimer;
-    private Boolean playing = false;
-    int i = 0;
+    FadeOutTimer fadeOutTimer, fadeInTimer;
+    private Boolean playing = false, attackPhase = false, decayPhase = false, sustainPhase = false, releasePhase = false;
 
 
     public Note(Button button, int soundId, SoundPool sounds, String name)
@@ -27,7 +26,6 @@ public class Note
         id = soundId;
         soundPool = sounds;
         noteName = name;
-
     }
 
     public void setEnvelope(int Attack, int Decay, int Sustain, int Release)
@@ -42,21 +40,9 @@ public class Note
 
     public void play(float volume)
     {
-        if (!playing)
-        {
-            initialVolume = volume;
-            stream = soundPool.play(id, volume, volume, 1, -1, 1f);
-            playing = true;
-        }
-        else
-        {
-            Log.d(TAG, "already playing!");
-            soundPool.stop(stream);
-            initialVolume = volume;
-            stream = soundPool.play(id, volume, volume, 1, -1, 1f);
-            playing = true;
-        }
-
+        initialVolume = volume;
+        stream = soundPool.play(id, initialVolume, initialVolume, 1, -1, 1f);
+        playing = true;
     }
 
     public void stop()
@@ -71,7 +57,8 @@ public class Note
 
     public void setVolume(float volume)
     {
-        soundPool.setVolume(stream, volume, volume) ;
+        soundPool.setVolume(stream, volume, volume);
+        initialVolume = volume;
     }
 
     public Button getTrigger ()
@@ -79,23 +66,44 @@ public class Note
         return trigger;
     }
 
+    public boolean isPlaying()
+    {
+        return playing;
+    }
+
     public String getNoteName()
     {
         return noteName;
     }
 
+    public void attack()
+    {
+        final long timeStep = (long)r/STEPS;
+        final float volumeStep = initialVolume/STEPS;
+        Log.d(TAG, "Timestep= " + timeStep);
+        fadeInTimer = new FadeOutTimer(a, timeStep, volumeStep, initialVolume);
+        fadeInTimer.start();
+    }
+
+    public void interrupt()
+    {
+        if (releasePhase)
+        {
+            fadeOutTimer.cancel();
+            Log.d(TAG, "timer canceled!");
+        }
+
+    }
+
     public void release()
     {
-        i = 0;
+        releasePhase = true;
         final long timeStep = (long)r/STEPS;
         final float volumeStep = initialVolume/STEPS;
         Log.d(TAG, "Timestep= " + timeStep);
         fadeOutTimer = new FadeOutTimer(r, timeStep, volumeStep, initialVolume);
         fadeOutTimer.start();
-        if (fadeOutTimer.checkFinished())
-        {
-            soundPool.stop(stream);
-        }
+
 
 
         // lower volume by a certain amount every step
@@ -120,7 +128,6 @@ public class Note
         return id;
     }
 
-
     // timer class for gradual fading
     public class FadeOutTimer extends CountDownTimer
     {
@@ -139,8 +146,10 @@ public class Note
         public void onFinish()
         {
             soundPool.stop(stream);
-            Log.d("1", "Timer finished");
+            Log.d(TAG, "Timer finished");
             finished = true;
+            playing = false;
+            releasePhase = false;
         }
 
         public Boolean checkFinished()
@@ -151,10 +160,8 @@ public class Note
         @Override
         public void onTick(long millisUntilFinished)
         {
-
-            soundPool.setVolume(stream, volume, volume);
             volume = volume - step;
-            Log.d("1", "volume = " + volume);
+            soundPool.setVolume(stream, volume, volume);
         }
     }
 }
