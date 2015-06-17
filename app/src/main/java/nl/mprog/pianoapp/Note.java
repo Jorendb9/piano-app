@@ -84,7 +84,8 @@ public class Note
         final long timeStep = (long)a/STEPS;
         final float volumeStep = targetVolume/STEPS;
         Log.d(TAG, "Timestep= " + timeStep);
-        fadeInTimer = new FadeOutTimer(a, timeStep, volumeStep, initialVolume);
+        initialVolume = targetVolume;
+        fadeInTimer = new FadeOutTimer(a, timeStep, volumeStep, 0);
         fadeInTimer.start();
     }
 
@@ -165,10 +166,13 @@ public class Note
             if (!phase.equals("Attack"))
             {
                 soundPool.stop(stream);
+                playing = false;
             }
+
             Log.d(TAG, "Timer finished");
             finished = true;
-            playing = false;
+            phase = "Idle";
+
         }
 
         public Boolean checkFinished()
