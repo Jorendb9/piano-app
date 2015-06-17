@@ -87,7 +87,6 @@ public class SoundBank {
         aSharp2 = soundPool.load(ctx, resId, 1);
         resId = getResId(instrument, "b2", packageName);
         b2 = soundPool.load(ctx, resId, 1);
-
         resId = getResId(instrument, "c3", packageName);
         c3 = soundPool.load(ctx, resId, 1);
         resId = getResId(instrument, "csharp3", packageName);
