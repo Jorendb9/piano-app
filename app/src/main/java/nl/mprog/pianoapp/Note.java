@@ -17,6 +17,7 @@ public class Note
     final static int STEPS = 100;
     final static String TAG = "Note";
     FadeOutTimer fadeOutTimer, fadeInTimer;
+    private String phase = "Idle";
     private Boolean playing = false, attackPhase = false, decayPhase = false, sustainPhase = false, releasePhase = false;
 
 
@@ -76,10 +77,12 @@ public class Note
         return noteName;
     }
 
-    public void attack()
+    public void attack(float targetVolume)
     {
-        final long timeStep = (long)r/STEPS;
-        final float volumeStep = initialVolume/STEPS;
+        phase = "Attack";
+        attackPhase = true;
+        final long timeStep = (long)a/STEPS;
+        final float volumeStep = targetVolume/STEPS;
         Log.d(TAG, "Timestep= " + timeStep);
         fadeInTimer = new FadeOutTimer(a, timeStep, volumeStep, initialVolume);
         fadeInTimer.start();
@@ -87,17 +90,26 @@ public class Note
 
     public void interrupt()
     {
-        if (releasePhase)
-        {
-            fadeOutTimer.cancel();
-            Log.d(TAG, "timer canceled!");
-        }
+        phase = "Idle";
+        fadeOutTimer.cancel();
+        Log.d(TAG, "timer canceled!");
+    }
 
+    public String getPhase()
+    {
+        return phase;
+    }
+
+    public void interruptAttack()
+    {
+        phase = "Idle";
+        fadeInTimer.cancel();
+        Log.d(TAG, "attack canceled!");
     }
 
     public void release()
     {
-        releasePhase = true;
+        phase = "Release";
         final long timeStep = (long)r/STEPS;
         final float volumeStep = initialVolume/STEPS;
         Log.d(TAG, "Timestep= " + timeStep);
@@ -128,6 +140,11 @@ public class Note
         return id;
     }
 
+    public int getA()
+    {
+        return a;
+    }
+
     // timer class for gradual fading
     public class FadeOutTimer extends CountDownTimer
     {
@@ -145,11 +162,13 @@ public class Note
         @Override
         public void onFinish()
         {
-            soundPool.stop(stream);
+            if (!phase.equals("Attack"))
+            {
+                soundPool.stop(stream);
+            }
             Log.d(TAG, "Timer finished");
             finished = true;
             playing = false;
-            releasePhase = false;
         }
 
         public Boolean checkFinished()
@@ -160,7 +179,15 @@ public class Note
         @Override
         public void onTick(long millisUntilFinished)
         {
-            volume = volume - step;
+            if (phase.equals("Attack"))
+            {
+                volume = volume + step;
+            }
+            else
+            {
+                volume = volume - step;
+            }
+            Log.d(TAG, "Volume = " +volume);
             soundPool.setVolume(stream, volume, volume);
         }
     }

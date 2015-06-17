@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4;
     private boolean playing = false, pitchAft = false;
-    private String aftSelect = "Volume", modSelect = "Release";
+    private String aftSelect = "Pitch", modSelect = "Attack";
     private int releaseTime = 0, attackTime = 0;
     private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
@@ -272,14 +272,23 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 note.getTrigger().setPressed(true);
 
                 // prevent conflicts if the same note is already playing
-                if (note.isPlaying())
+                if (note.getPhase().equals("Release"))
                 {
-                    Log.d(TAG, "already playing!");
+                    Log.d(TAG, "still playing!");
                     note.interrupt();
                     note.stop();
                 }
-                note.play(volume);
 
+                // play note but only use attack if variable is significant
+                if (note.getA() > 10)
+                {
+                    note.play(0);
+                    note.attack(volume);
+                }
+                else
+                {
+                    note.play(volume);
+                }
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -291,6 +300,11 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
                 note.getTrigger().setPressed(false);
+                // stop attack phase
+                if (note.getPhase().equals("Attack"))
+                {
+                    note.interruptAttack();
+                }
                 note.release();
 
                 break;
