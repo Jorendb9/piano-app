@@ -128,81 +128,15 @@ public class SoundBank {
         return soundPool;
     }
 
-
-
     public void stopAllSounds()
     {
         soundPool.autoPause();
-        for (int value : soundMap.values())
-        {
-            soundPool.stop(value);
-        }
-    }
-
-    public int playSound(int soundId, float volume)
-    {
-        return soundPool.play(soundId, volume, volume, 1, -1, 1f);
-    }
-
-    public void stopSound(int streamId)
-    {
-        soundPool.stop(streamId);
-    }
-
-
-    public void mapStream(Button button, int streamId)
-    {
-        soundMap.put(button, streamId);
-    }
-
-    public int getStream(Button button)
-    {
-        return soundMap.get(button);
-    }
-
-    public void setPitch(int streamId, float pitch)
-    {
-        soundPool.setRate(streamId, pitch);
-    }
-
-    public void setVolume(int streamId, float volume)
-    {
-        soundPool.setVolume(streamId, volume, volume);
     }
 
     public boolean loaded()
     {
         return loaded;
     }
-
-
-
-    /*public void fadeIn(final int streamId, final float finalVolume, int attackTime)
-    {
-
-        long timeStep = (long)attackTime/STEPS;
-        float volumeStep = finalVolume/STEPS;
-        fadeInTimer = new FadeOutTimer(attackTime, timeStep, streamId, volumeStep, 0, false);
-        fadeInTimer.start();
-    }
-
-    public void fadeOut(final int streamId, final float initVolume, int releaseTime)
-    {
-        long timeStep = (long)releaseTime/STEPS;
-        float volumeStep = initVolume/STEPS;
-        fadeOutTimer = new FadeOutTimer(releaseTime, timeStep, streamId, volumeStep, initVolume, true);
-        fadeOutTimer.start();
-    }
-
-    public void interruptTimer()
-    {
-        if(fadeInTimer != null) {
-            fadeInTimer.cancel();
-            fadeInTimer = null;
-        }
-    }*/
-
-
 
     public void unloadAll()
     {

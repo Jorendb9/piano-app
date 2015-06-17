@@ -70,6 +70,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
 
+    //set up seekbar
     public void modWheelSetup()
     {
         SeekBar modWheel = (SeekBar)findViewById(R.id.seekBar);
@@ -104,6 +105,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     }
 
+
+    // go to fx Activity
     public void onEffectsStart(View v)
     {
 
@@ -346,11 +349,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 note.setEnvelope(attackTime, 0, 0, releaseTime);
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
-                note.play(volume);
-                // soundBank.mapStream(button, streamId);
-                //soundBank.fadeIn(streamId, volume, attackTime);
-                // Log.d("1", "ID =" + streamId);
                 note.getTrigger().setPressed(true);
+                note.play(volume);
 
                 break;
 
@@ -363,7 +363,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
                 note.getTrigger().setPressed(false);
-                note.release();
+                //note.release();
                 releaseDelay(note);
                 break;
         }

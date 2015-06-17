@@ -15,7 +15,7 @@ public class Note
     private SoundPool soundPool;
     final static int STEPS = 100;
     final static String TAG = "Note";
-    FadeOutTimer fadeOutTimer;
+    //FadeOutTimer fadeOutTimer;
     private Boolean playing = false;
     int i = 0;
 
@@ -90,6 +90,8 @@ public class Note
             soundPool.stop(stream);
         }*/
 
+
+        // lower volume by a certain amount every step
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
@@ -117,7 +119,7 @@ public class Note
 
 
     // timer class for gradual fading
-    public class FadeOutTimer extends CountDownTimer
+    /*public class FadeOutTimer extends CountDownTimer
     {
         private float step, volume;
         public boolean finished;
@@ -152,5 +154,5 @@ public class Note
             volume = volume - step;
             Log.d("1", "volume = " + volume);
         }
-    }
+    }*/
 }
