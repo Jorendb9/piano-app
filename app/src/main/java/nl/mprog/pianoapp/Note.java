@@ -9,16 +9,16 @@ import android.widget.Button;
 
 public class Note
 {
-    private int a, d, s, r, id, stream;
+    private int a, d, r, id, stream;
     private Button trigger;
-    private float initialVolume;
+    private float initialVolume, s;
     private SoundPool soundPool;
     private String noteName;
     final static int STEPS = 100;
     final static String TAG = "Note";
-    FadeOutTimer fadeOutTimer, fadeInTimer;
+    FadeOutTimer fadeOutTimer, fadeInTimer, decayTimer;
     private String phase = "Idle";
-    private Boolean playing = false, attackPhase = false, decayPhase = false, sustainPhase = false, releasePhase = false;
+    private Boolean playing = false;
 
 
     public Note(Button button, int soundId, SoundPool sounds, String name)
@@ -29,7 +29,7 @@ public class Note
         noteName = name;
     }
 
-    public void setEnvelope(int Attack, int Decay, int Sustain, int Release)
+    public void setEnvelope(int Attack, int Decay, float Sustain, int Release)
     {
         a = Attack;
         d = Decay;
@@ -80,13 +80,22 @@ public class Note
     public void attack(float targetVolume)
     {
         phase = "Attack";
-        attackPhase = true;
         final long timeStep = (long)a/STEPS;
         final float volumeStep = targetVolume/STEPS;
-        Log.d(TAG, "Timestep= " + timeStep);
+        Log.d(TAG, "Attack Timestep= " + timeStep);
         initialVolume = targetVolume;
         fadeInTimer = new FadeOutTimer(a, timeStep, volumeStep, 0);
         fadeInTimer.start();
+    }
+
+    public void decay()
+    {
+        phase = "Decay";
+        final long timeStep = (long)d/STEPS;
+        final float volumeStep = (initialVolume-s)/STEPS;
+        Log.d(TAG, "Decay Timestep= " + timeStep);
+        decayTimer = new FadeOutTimer(d, timeStep, volumeStep, initialVolume);
+        decayTimer.start();
     }
 
     public void interrupt()
@@ -108,6 +117,13 @@ public class Note
         Log.d(TAG, "attack canceled!");
     }
 
+    public void interruptDecay()
+    {
+        phase = "Idle";
+        decayTimer.cancel();
+        Log.d(TAG, "decay canceled!");
+    }
+
     public void release()
     {
         phase = "Release";
@@ -116,24 +132,6 @@ public class Note
         Log.d(TAG, "Timestep= " + timeStep);
         fadeOutTimer = new FadeOutTimer(r, timeStep, volumeStep, initialVolume);
         fadeOutTimer.start();
-
-
-
-        // lower volume by a certain amount every step
-        /*final Handler handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run()
-            {
-                soundPool.setVolume(stream, (initialVolume-(volumeStep*i)), (initialVolume-(volumeStep*i)));
-                i++;
-                Log.d(TAG, "volume= " + (initialVolume-(volumeStep*i)));
-                Log.d(TAG, "iterator= " + i);
-                handler.postDelayed(this, timeStep);
-            }
-        });
-        soundPool.stop(stream);
-        Log.d(TAG, "finished");*/
     }
 
     public int id()
@@ -145,6 +143,14 @@ public class Note
     {
         return a;
     }
+    public int getD() {return d;}
+
+    public float getS()
+    {
+        return s;
+    }
+
+    public int getR(){return r;}
 
     // timer class for gradual fading
     public class FadeOutTimer extends CountDownTimer
@@ -157,27 +163,34 @@ public class Note
             finished = false;
             step = volumeStep;
             volume = initVolume;
-            Log.d("1", "Timer set");
         }
 
         @Override
         public void onFinish()
         {
-            if (!phase.equals("Attack"))
+            Log.d(TAG,"Timer finished");
+            this.cancel();
+            if (phase.equals("Release"))
             {
                 soundPool.stop(stream);
                 playing = false;
+                phase = "Idle";
             }
-
-            Log.d(TAG, "Timer finished");
-            finished = true;
-            phase = "Idle";
-
-        }
-
-        public Boolean checkFinished()
-        {
-            return finished;
+            else if (phase.equals("Decay") && s == 0)
+            {
+                soundPool.stop(stream);
+                playing = false;
+                phase = "Idle";
+            }
+            else if (phase.equals("Attack") && d> 0 && s < volume)
+            {
+                phase = "Decay";
+                final long timeStep = (long)d/STEPS;
+                final float volumeStep = (volume-s)/STEPS;
+                Log.d(TAG, "Decay Timestep= " + timeStep);
+                decayTimer = new FadeOutTimer(d, timeStep, volumeStep, volume);
+                decayTimer.start();
+            }
         }
 
         @Override
@@ -191,7 +204,6 @@ public class Note
             {
                 volume = volume - step;
             }
-            Log.d(TAG, "Volume = " +volume);
             soundPool.setVolume(stream, volume, volume);
         }
     }

@@ -28,9 +28,9 @@ import java.util.HashMap;
 public class MainActivity extends Activity implements View.OnTouchListener {
 
     private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4;
-    private boolean playing = false, pitchAft = false;
-    private String aftSelect = "Pitch", modSelect = "Attack";
-    private int releaseTime = 0, attackTime = 0;
+    private String aftSelect = "Off", modSelect = "Decay";
+    private int releaseTime = 0, attackTime = 1000, decayTime = 1000;
+    private float sustain = 0.2f;
     private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
     public static String PACKAGE_NAME, TAG = "Main";
@@ -94,13 +94,17 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 if (modSelect.equals("Attack"))
                 {
                     attackTime = (int) (1000 * logScale(temp));
-                    Log.d(TAG, "Attack Time (ms) = " + attackTime);
+
                 }
                 else if (modSelect.equals("Release"))
                 {
                     releaseTime = (int) (1000 * logScale(temp));
-                    Log.d(TAG, "Release Time (ms) = " + releaseTime);
                 }
+                else if (modSelect.equals("Decay"))
+                {
+                    decayTime = (int) (1000 * logScale(temp));
+                }
+
             }
         });
 
@@ -186,8 +190,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         register(R.id.b3);
         register(R.id.c4);
 
-        Log.d(TAG, "Note ID " + soundBank.idList.get(0));
-
     }
 
     public void initNotes()
@@ -241,8 +243,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         if (soundBank.loaded())
         {
+
             String tempId = v.getResources().getResourceName(v.getId()).substring(21);
-            Log.d(TAG, tempId);
             Note currentNote = getNote(tempId);
             if (currentNote!= null)
             {
@@ -257,16 +259,18 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
+
     public boolean buttonPress(MotionEvent event, Note note)
     {
 
         float volume;
 
+
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
 
-                note.setEnvelope(attackTime, 0, 0, releaseTime);
+                note.setEnvelope(attackTime, decayTime, sustain, releaseTime);
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
                 note.getTrigger().setPressed(true);
@@ -285,9 +289,14 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                     note.play(0);
                     note.attack(volume);
                 }
-                else
+                else if (note.getD() >10)
                 {
                     note.play(volume);
+                    note.decay();
+                }
+                else
+                {
+                    note.play(sustain);
                 }
                 break;
 
@@ -299,14 +308,25 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
+
                 note.getTrigger().setPressed(false);
-                // stop attack phase
+                // interrupt phases
                 if (note.getPhase().equals("Attack"))
                 {
                     note.interruptAttack();
                 }
-                note.release();
-
+                else if (note.getPhase().equals("Decay"))
+                {
+                    note.interruptDecay();
+                }
+                if (note.getR() > 0)
+                {
+                    note.release();
+                }
+                else
+                {
+                    note.stop();
+                }
                 break;
         }
         return true;
@@ -319,6 +339,9 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 aftSelect = data.getStringExtra("afterTouch");
                 modSelect = data.getStringExtra("modWheel");
                 releaseTime = (int)(1000 * logScale(data.getIntExtra("release", 0)));
+                attackTime = (int)(1000 * logScale(data.getIntExtra("attack", 0)));
+                decayTime = (int)(1000 * logScale(data.getIntExtra("decay", 0)));
+                sustain = volumeConverter(data.getIntExtra("sustain", 0));
             }
             if (resultCode == RESULT_CANCELED) {
                 Log.d("1", "no result");
@@ -334,7 +357,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         if (aftSelect.equals("Pitch"))
         {
             float pitch = (float)(volumeConverter(event.getY()) -0.6) /20 + 1;
-            Log.d("1", "Pitch = " + pitch);
             note.setPitch(pitch);
         }
         else if (aftSelect.equals("Volume"))

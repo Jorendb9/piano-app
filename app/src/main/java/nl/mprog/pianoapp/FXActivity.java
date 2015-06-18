@@ -19,7 +19,7 @@ public class FXActivity extends ActionBarActivity {
 
     private String afterTouch, modWheel;
     private Spinner spinnerAft, spinnerMod;
-    private int release;
+    private int release, attack, decay, sustain;
     VerticalSeekBar attackBar, decayBar, sustainBar, releaseBar;
     TextView seekBarValue;
 
@@ -34,29 +34,56 @@ public class FXActivity extends ActionBarActivity {
 
         seekBarValue = (TextView) findViewById(R.id.seekBarValue);
 
-        setupSeekBars();
+        initSeekBars();
 
 
     }
 
-    public void setupSeekBars()
+    public void initSeekBars()
     {
         attackBar = (VerticalSeekBar) findViewById(R.id.attackBar);
         decayBar = (VerticalSeekBar) findViewById(R.id.decayBar);
         sustainBar = (VerticalSeekBar) findViewById(R.id.sustainBar);
         releaseBar = (VerticalSeekBar) findViewById(R.id.releaseBar);
 
+        attackBar.setMax(5000);
+        decayBar.setMax(5000);
+        sustainBar.setMax(700);
         releaseBar.setMax(5000);
+        decayBar.setProgress(decayBar.getMax());
+        sustainBar.setProgress(sustainBar.getMax());
+        seekBarSetup(attackBar);
+        seekBarSetup(decayBar);
+        seekBarSetup(sustainBar);
+        seekBarSetup(releaseBar);
 
-        releaseBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    }
+
+    public void seekBarSetup(VerticalSeekBar seekBar)
+    {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
+                if (seekBar == attackBar)
+                {
+                    attack = progress;
+                }
+                if (seekBar == decayBar)
+                {
+                    decay = progress;
+                }
+                if (seekBar == sustainBar)
+                {
+                    sustain = progress;
+                }
+                if (seekBar == releaseBar)
+                {
+                    release = progress;
+
+                }
                 seekBarValue.setText(String.valueOf(progress));
-                release = progress;
-
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
@@ -95,6 +122,9 @@ public class FXActivity extends ActionBarActivity {
         afterTouch = spinnerAft.getSelectedItem().toString();
         modWheel = spinnerMod.getSelectedItem().toString();
         Intent returnIntent = new Intent();
+        returnIntent.putExtra("attack", attack);
+        returnIntent.putExtra("decay", decay);
+        returnIntent.putExtra("sustain", sustain);
         returnIntent.putExtra("release", release);
         returnIntent.putExtra("afterTouch",afterTouch);
         returnIntent.putExtra("modWheel",modWheel);
