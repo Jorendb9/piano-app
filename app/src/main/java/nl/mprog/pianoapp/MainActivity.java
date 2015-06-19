@@ -28,9 +28,10 @@ import java.util.HashMap;
 public class MainActivity extends Activity implements View.OnTouchListener {
 
     private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4;
-    private String aftSelect = "Off", modSelect = "Decay";
-    private int releaseTime = 0, attackTime = 1000, decayTime = 1000;
-    private float sustain = 0.2f;
+    private String aftSelect = "None", modSelect = "Release";
+    private int releaseTime = 0, attackTime = 0, decayTime = 0;
+    private float sustain = 0.5f;
+    private boolean vibrato = false;
     private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
     public static String PACKAGE_NAME, TAG = "Main";
@@ -40,7 +41,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private SoundBank soundBank;
     private SoundPool soundPool;
     private Note c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4;
-
+    private LowFrequencyOscillator lfo;
 
 
 
@@ -51,7 +52,9 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         setContentView(R.layout.activity_main);
         PACKAGE_NAME = getApplicationContext().getPackageName();
 
-
+        lfo = new LowFrequencyOscillator();
+        lfo.setIntensity(0.95f, 1.05f);
+        lfo.setRate(120);
         soundBank = new SoundBank(getApplicationContext());
         soundBank.setInstrument("square");
         soundBank.loadSounds(PACKAGE_NAME);
@@ -269,7 +272,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-
                 note.setEnvelope(attackTime, decayTime, sustain, releaseTime);
                 // uses yCoordinates of touch to determine note velocity
                 volume = volumeConverter(event.getY());
@@ -296,7 +298,11 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 }
                 else
                 {
-                    note.play(sustain);
+                    note.play(volume);
+                }
+                if (vibrato)
+                {
+                    lfo.startVibrato(note);
                 }
                 break;
 
@@ -310,6 +316,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             case MotionEvent.ACTION_UP:
 
                 note.getTrigger().setPressed(false);
+                if (vibrato)
+                {
+                    lfo.stopVibrato(note);
+                }
                 // interrupt phases
                 if (note.getPhase().equals("Attack"))
                 {
@@ -341,7 +351,19 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 releaseTime = (int)(1000 * logScale(data.getIntExtra("release", 0)));
                 attackTime = (int)(1000 * logScale(data.getIntExtra("attack", 0)));
                 decayTime = (int)(1000 * logScale(data.getIntExtra("decay", 0)));
-                sustain = volumeConverter(data.getIntExtra("sustain", 0));
+                sustain = (data.getIntExtra("sustain", 0))/700;
+                Log.d(TAG, "Sustain2 = " + sustain);
+                vibrato = (data.getBooleanExtra("vibrato", false));
+                if (sustain >= 1)
+                {
+                    sustain = 0.99f;
+                }
+                Log.d(TAG, "Sustain2 = " + sustain);
+
+                if ((attackTime > 0 || decayTime > 0) && aftSelect.equals("volume"))
+                {
+                    aftSelect = "Off";
+                }
             }
             if (resultCode == RESULT_CANCELED) {
                 Log.d("1", "no result");
@@ -363,6 +385,15 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         {
             float volume2 = volumeConverter(event.getY());
             note.setVolume(volume2);
+        }
+        else if (aftSelect.equals("Vibrato Intensity"))
+        {
+            float offset = (event.getY())/7000;
+            Log.d(TAG,"offset = " + offset);
+            float lowerBound = 1 - offset;
+            float upperBound = 1 + offset;
+            lfo.setIntensity(lowerBound, upperBound);
+
         }
     }
 

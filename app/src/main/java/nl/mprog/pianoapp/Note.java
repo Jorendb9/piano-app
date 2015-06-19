@@ -170,13 +170,7 @@ public class Note
         {
             Log.d(TAG,"Timer finished");
             this.cancel();
-            if (phase.equals("Release"))
-            {
-                soundPool.stop(stream);
-                playing = false;
-                phase = "Idle";
-            }
-            else if (phase.equals("Decay") && s == 0)
+            if (phase.equals("Release") || (phase.equals("Decay") && s == 0))
             {
                 soundPool.stop(stream);
                 playing = false;

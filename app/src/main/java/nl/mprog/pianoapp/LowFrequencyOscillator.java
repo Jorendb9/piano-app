@@ -41,7 +41,6 @@ public class LowFrequencyOscillator
         Log.d("LFO", "Vibrato start");
         currentNote = note;
         downWard();
-
     }
 
 
@@ -98,18 +97,19 @@ public class LowFrequencyOscillator
         @Override
         public void onFinish()
         {
-            /*if (waveDirection.equals("down"))
+            this.cancel();
+            if (waveDirection.equals("down"))
             {
+                waveDirection = "up";
                 upwardTimer = new LFOTimer(timeRate, timeStep, pitchStep, lowerBound, "up");
                 upwardTimer.start();
             }
             else if (waveDirection.equals("up"))
             {
+                waveDirection = "down";
                 downwardTimer = new LFOTimer(timeRate, timeStep, pitchStep, upperBound, "down");
                 downwardTimer.start();
-            }*/
-            this.cancel();
-
+            }
 
         }
 

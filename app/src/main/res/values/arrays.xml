@@ -10,7 +10,9 @@
     </string-array>
 
     <string-array name="afterTouch">
+        <item>None</item>
         <item>Volume</item>
         <item>Pitch</item>
+        <item>Vibrato Intensity</item>
     </string-array>
 </resources>

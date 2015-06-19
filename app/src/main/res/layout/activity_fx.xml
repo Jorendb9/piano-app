@@ -112,5 +112,17 @@
         android:layout_alignLeft="@+id/linearLayout2"
         android:layout_alignStart="@+id/linearLayout2" />
 
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vibrato"
+        android:id="@+id/toggleButton"
+        android:textOn="Vibrato on"
+        android:textOff="Vibrato off"
+        android:onClick="onToggleClicked"
+        android:layout_above="@+id/seekBarValue"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>

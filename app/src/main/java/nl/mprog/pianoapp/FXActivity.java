@@ -19,8 +19,9 @@ public class FXActivity extends ActionBarActivity {
 
     private String afterTouch, modWheel;
     private Spinner spinnerAft, spinnerMod;
-    private int release, attack, decay, sustain;
+    private int release = 0, attack = 0, decay = 0, sustain = 700;
     VerticalSeekBar attackBar, decayBar, sustainBar, releaseBar;
+    private boolean vibrato = false;
     TextView seekBarValue;
 
 
@@ -50,7 +51,6 @@ public class FXActivity extends ActionBarActivity {
         decayBar.setMax(5000);
         sustainBar.setMax(700);
         releaseBar.setMax(5000);
-        decayBar.setProgress(decayBar.getMax());
         sustainBar.setProgress(sustainBar.getMax());
         seekBarSetup(attackBar);
         seekBarSetup(decayBar);
@@ -128,8 +128,15 @@ public class FXActivity extends ActionBarActivity {
         returnIntent.putExtra("release", release);
         returnIntent.putExtra("afterTouch",afterTouch);
         returnIntent.putExtra("modWheel",modWheel);
+        returnIntent.putExtra("vibrato", vibrato);
         setResult(RESULT_OK,returnIntent);
         finish();
+    }
+
+    public void onToggleClicked(View view)
+    {
+        // Is the toggle on?
+        vibrato = ((ToggleButton) view).isChecked();
     }
 
     @Override
