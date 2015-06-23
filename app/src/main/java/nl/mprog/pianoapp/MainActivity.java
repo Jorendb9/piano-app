@@ -32,7 +32,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private int releaseTime = 0, attackTime = 0, decayTime = 0;
     private float sustain = 0.5f;
     private boolean vibrato = false;
-    private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000;
+    private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000, MINIMUM_VALUE = 10;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
     public static String PACKAGE_NAME, TAG = "Main";
     private ArrayList<Integer> noteIdList;
@@ -132,7 +132,9 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     // assign buttons to onTouchListener
     public void initButtons(){
 
-
+        noteIdList = new ArrayList<>(Arrays.asList(R.id.c2, R.id.cSharp2, R.id.d2, R.id.dSharp2, R.id.e2, R.id.f2,
+        R.id.fSharp2, R.id.g2, R.id.gSharp2, R.id.a2, R.id.aSharp2, R.id.b2, R.id.c3, R.id.cSharp3, R.id.d3,
+        R.id.dSharp3, R.id.e3, R.id.f3, R.id.fSharp3, R.id.g3, R.id.gSharp3, R.id.a3, R.id.aSharp3, R.id.b3, R.id.c4));
 
         buttonC2 = (Button) findViewById(R.id.c2);
         buttonCSharp2 = (Button) findViewById(R.id.cSharp2);
@@ -160,38 +162,17 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         buttonB3 = (Button) findViewById(R.id.b3);
         buttonC4 = (Button) findViewById(R.id.c4);
 
-
         buttonList = new ArrayList<>(Arrays.asList(buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2,
         buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3,
         buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4));
 
 
-        register(R.id.c2);
-        register(R.id.cSharp2);
-        register(R.id.d2);
-        register(R.id.dSharp2);
-        register(R.id.e2);
-        register(R.id.f2);
-        register(R.id.fSharp2);
-        register(R.id.g2);
-        register(R.id.gSharp2);
-        register(R.id.a2);
-        register(R.id.aSharp2);
-        register(R.id.b2);
+        for (int i = 0; i < noteIdList.size(); i++)
+        {
+            register(noteIdList.get(i));
+        }
 
-        register(R.id.c3);
-        register(R.id.cSharp3);
-        register(R.id.d3);
-        register(R.id.dSharp3);
-        register(R.id.e3);
-        register(R.id.f3);
-        register(R.id.fSharp3);
-        register(R.id.g3);
-        register(R.id.gSharp3);
-        register(R.id.a3);
-        register(R.id.aSharp3);
-        register(R.id.b3);
-        register(R.id.c4);
+
 
     }
 
@@ -284,14 +265,13 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                     note.interrupt();
                     note.stop();
                 }
-
-                // play note but only use attack if variable is significant
-                if (note.getA() > 10)
+                // play note but only use attack fade-in if variable is significant
+                if (note.getA() > MINIMUM_VALUE)
                 {
                     note.play(0);
                     note.attack(volume);
                 }
-                else if (note.getD() >10)
+                else if (note.getD() > MINIMUM_VALUE)
                 {
                     note.play(volume);
                     note.decay();
