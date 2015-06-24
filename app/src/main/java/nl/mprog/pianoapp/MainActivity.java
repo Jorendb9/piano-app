@@ -119,6 +119,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     {
 
         Intent i = new Intent(this, FXActivity.class);
+        i.putExtra("aftSelect", aftSelect);
+        i.putExtra("modSelect", modSelect);
         startActivityForResult(i, 1);
     }
 
@@ -224,15 +226,13 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent event)
     {
-
         if (soundBank.loaded())
         {
-
             String tempId = v.getResources().getResourceName(v.getId()).substring(21);
             Note currentNote = getNote(tempId);
             if (currentNote!= null)
             {
-                buttonPress(event, currentNote);
+                motionHandler(event, currentNote);
             }
             else
             {
@@ -244,46 +244,18 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
 
-    public boolean buttonPress(MotionEvent event, Note note)
+    public boolean motionHandler(MotionEvent event, Note note)
     {
 
-        float volume;
-
+        float volume = 0;
 
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                note.setEnvelope(attackTime, decayTime, sustain, releaseTime);
-                // uses yCoordinates of touch to determine note velocity
-                volume = volumeConverter(event.getY());
-                note.getTrigger().setPressed(true);
 
-                // prevent conflicts if the same note is already playing
-                if (note.getPhase().equals("Release"))
-                {
-                    Log.d(TAG, "still playing!");
-                    note.interrupt();
-                    note.stop();
-                }
-                // play note but only use attack fade-in if variable is significant
-                if (note.getA() > MINIMUM_VALUE)
-                {
-                    note.play(0);
-                    note.attack(volume);
-                }
-                else if (note.getD() > MINIMUM_VALUE)
-                {
-                    note.play(volume);
-                    note.decay();
-                }
-                else
-                {
-                    note.play(volume);
-                }
-                if (vibrato)
-                {
-                    lfo.startVibrato(note);
-                }
+                // only play note if ADSR envelope allows it
+
+                playNote(note, event, volume);
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -294,33 +266,79 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
-
-                note.getTrigger().setPressed(false);
-                if (vibrato)
-                {
-                    lfo.stopVibrato(note);
-                }
-                // interrupt phases
-                if (note.getPhase().equals("Attack"))
-                {
-                    note.interruptAttack();
-                }
-                else if (note.getPhase().equals("Decay"))
-                {
-                    note.interruptDecay();
-                }
-                if (note.getR() > 0)
-                {
-                    note.release();
-                }
-                else
-                {
-                    note.stop();
-                }
+                stopNote(note);
                 break;
         }
         return true;
     }
+
+
+
+
+    public void playNote(Note note, MotionEvent event, float volume)
+    {
+        // show visual pressure feedback
+        note.getTrigger().setPressed(true);
+
+        // account for volume envelope variables
+        if (attackTime + decayTime + sustain + releaseTime !=0)
+        {
+            note.setEnvelope(attackTime, decayTime, sustain, releaseTime);
+            // uses yCoordinates of touch to determine note velocity
+            volume = volumeConverter(event.getY());
+
+
+            // prevent conflicts if the same note is already playing
+            if (note.getPhase().equals("Release")) {
+                Log.d(TAG, "still playing!");
+                note.interrupt();
+                note.stop();
+            }
+
+            // play note but only use attack fade-in if variable is significant
+            if (note.getA() > MINIMUM_VALUE) {
+                note.play(0);
+                note.attack(volume);
+            } else if (note.getD() > MINIMUM_VALUE) {
+                note.play(volume);
+                note.decay();
+            } else {
+                note.play(volume);
+            }
+            if (vibrato) {
+                lfo.startVibrato(note);
+            }
+        }
+    }
+
+
+    public void stopNote(Note note)
+    {
+        note.getTrigger().setPressed(false);
+        if (vibrato)
+        {
+            lfo.stopVibrato(note);
+        }
+        // interrupt phase
+        if (note.getPhase().equals("Attack"))
+        {
+            note.interruptAttack();
+        }
+        else if (note.getPhase().equals("Decay"))
+        {
+            note.interruptDecay();
+        }
+        if (note.getR() > 0)
+        {
+            note.release();
+        }
+        else
+        {
+            note.stop();
+        }
+    }
+
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 

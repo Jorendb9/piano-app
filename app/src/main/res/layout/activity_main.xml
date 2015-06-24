@@ -1,52 +1,73 @@
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/gradient_dark"
     android:orientation="vertical"
     android:gravity="bottom"
-    android:layout_centerHorizontal="true">
+    android:layout_centerHorizontal="true"
+    android:background="@drawable/gradient_dark"
+    >
+
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_width="700dp"
+        android:layout_height="65dp"
         >
 
-
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:contentDescription="background"
+            android:src="@drawable/background" />
 
         <SeekBar
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/seekBar"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"/>
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:thumb="@drawable/thumb"
+            />
 
 
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Killswitch"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
             android:onClick="onSoundKill"
+            android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/button2"
             android:layout_toEndOf="@+id/button2"
+            android:background="@drawable/stop"
             android:id="@+id/button" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="FX"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/button2"
+            android:scaleType="fitXY"
             android:onClick="onEffectsStart"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
+            android:background="@drawable/fx"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/seekBar"
             android:layout_toEndOf="@+id/seekBar"
             />
+
+
 
 
     </RelativeLayout>

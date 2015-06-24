@@ -30,14 +30,43 @@ public class FXActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fx);
-        spinnerMod=(Spinner) findViewById(R.id.spinnerMod);
-        spinnerAft=(Spinner) findViewById(R.id.spinnerAft);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null)
+        {
+            afterTouch = extras.getString("aftSelect");
+            modWheel = extras.getString("modSelect");
+        }
+
 
         seekBarValue = (TextView) findViewById(R.id.seekBarValue);
 
+        initSpinners();
         initSeekBars();
 
+    }
 
+    public void initSpinners()
+    {
+        spinnerMod=(Spinner) findViewById(R.id.spinnerMod);
+        spinnerAft=(Spinner) findViewById(R.id.spinnerAft);
+        spinnerMod.setSelection(getIndex(spinnerMod, modWheel));
+        spinnerAft.setSelection(getIndex(spinnerAft, afterTouch));
+    }
+
+    private int getIndex(Spinner spinner, String selection)
+    {
+        int index = 0;
+        for (int i = 0; i<spinner.getCount();i++)
+        {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(selection))
+            {
+                index = i;
+                break;
+            }
+
+        }
+        return index;
     }
 
     public void initSeekBars()
