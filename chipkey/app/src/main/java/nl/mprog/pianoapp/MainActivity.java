@@ -27,37 +27,42 @@ import java.util.HashMap;
 
 public class MainActivity extends Activity implements View.OnTouchListener {
 
-    private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4;
+    private Button buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2, buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3, buttonDSharp3, buttonE3,
+    buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4, buttonCSharp4, buttonD4, buttonDSharp4, buttonE4, buttonF4, buttonFSharp4, buttonG4, buttonGSharp4, buttonA4, buttonASharp4, buttonB4, buttonC5;
     private String aftSelect = "None", modSelect = "Release";
-    private int releaseTime = 0, attackTime = 0, decayTime = 0;
+    private int releaseTime = 0, attackTime = 0, decayTime = 0, vRate = 150;
     private float sustain = 0.5f;
     private boolean vibrato = false;
-
-    public static String PACKAGE_NAME, TAG = "Main";
     private ArrayList<Integer> noteIdList;
     private ArrayList<Note> noteList;
     private ArrayList<Button> buttonList;
     private SoundBank soundBank;
     private SoundPool soundPool;
-    private Note c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4;
+    private Note c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4, cSharp4, d4, dSharp4, e4, f4, fSharp4, g4, gSharp4, a4, aSharp4, b4, c5;
     private LowFrequencyOscillator lfo;
 
-    private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000, MINIMUM_VALUE = 10, DEF_RATE = 120, ENV_MULTIPLIER = 1000;
-    private static final float DEF_INTENSITY_MIN = 0.95f , DEF_INTENSITY_MAX = 1.05f;
+    private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000, MINIMUM_VALUE = 10, ENV_MULTIPLIER = 1000;
+    private static final float DEF_INTENSITY_MIN = 0.97f , DEF_INTENSITY_MAX = 1.03f;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
+
+    public static String PACKAGE_NAME, TAG = "Main";
+
+
 
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PACKAGE_NAME = getApplicationContext().getPackageName();
 
         lfo = new LowFrequencyOscillator();
         lfo.setIntensity(DEF_INTENSITY_MIN, DEF_INTENSITY_MAX);
-        lfo.setRate(DEF_RATE);
+        lfo.setRate(vRate);
         soundBank = new SoundBank(getApplicationContext());
         soundBank.setInstrument("square");
         soundBank.loadSounds(PACKAGE_NAME);
@@ -108,6 +113,13 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                     decayTime = (int) (ENV_MULTIPLIER * logScale(temp));
                 }
 
+                else if (modSelect.equals("Vibrato Rate"))
+                {
+                    vRate = 350 - (int)(70 * logScale(temp));
+                    Log.d(TAG, "Vibrato Rate = " + vRate);
+                    lfo.setRate(vRate);
+                }
+
             }
         });
 
@@ -121,6 +133,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         Intent i = new Intent(this, FXActivity.class);
         i.putExtra("aftSelect", aftSelect);
         i.putExtra("modSelect", modSelect);
+        i.putExtra("vibrato", vibrato);
         startActivityForResult(i, 1);
     }
 
@@ -137,7 +150,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         noteIdList = new ArrayList<>(Arrays.asList(R.id.c2, R.id.cSharp2, R.id.d2, R.id.dSharp2, R.id.e2, R.id.f2,
         R.id.fSharp2, R.id.g2, R.id.gSharp2, R.id.a2, R.id.aSharp2, R.id.b2, R.id.c3, R.id.cSharp3, R.id.d3,
-        R.id.dSharp3, R.id.e3, R.id.f3, R.id.fSharp3, R.id.g3, R.id.gSharp3, R.id.a3, R.id.aSharp3, R.id.b3, R.id.c4));
+        R.id.dSharp3, R.id.e3, R.id.f3, R.id.fSharp3, R.id.g3, R.id.gSharp3, R.id.a3, R.id.aSharp3, R.id.b3, R.id.c4, R.id.cSharp4, R.id.d4,
+        R.id.dSharp4, R.id.e4, R.id.f4, R.id.fSharp4, R.id.g4, R.id.gSharp4, R.id.a4, R.id.aSharp4, R.id.b4, R.id.c5));
 
         buttonC2 = (Button) findViewById(R.id.c2);
         buttonCSharp2 = (Button) findViewById(R.id.cSharp2);
@@ -164,10 +178,23 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         buttonASharp3 = (Button) findViewById(R.id.aSharp3);
         buttonB3 = (Button) findViewById(R.id.b3);
         buttonC4 = (Button) findViewById(R.id.c4);
+        buttonCSharp4 = (Button) findViewById(R.id.cSharp4);
+        buttonD4 = (Button) findViewById(R.id.d4);
+        buttonDSharp4 = (Button) findViewById(R.id.dSharp4);
+        buttonE4 = (Button) findViewById(R.id.e4);
+        buttonF4 = (Button) findViewById(R.id.f4);
+        buttonFSharp4 = (Button) findViewById(R.id.fSharp4);
+        buttonG4 = (Button) findViewById(R.id.g4);
+        buttonGSharp4 = (Button) findViewById(R.id.gSharp4);
+        buttonA4 = (Button) findViewById(R.id.a4);
+        buttonASharp4 = (Button) findViewById(R.id.aSharp4);
+        buttonB4 = (Button) findViewById(R.id.b4);
+        buttonC5 = (Button) findViewById(R.id.c5);
 
         buttonList = new ArrayList<>(Arrays.asList(buttonC2, buttonCSharp2, buttonD2, buttonDSharp2, buttonE2,
         buttonF2, buttonFSharp2, buttonG2, buttonGSharp2, buttonA2, buttonASharp2, buttonB2, buttonC3, buttonCSharp3, buttonD3,
-        buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4));
+        buttonDSharp3, buttonE3, buttonF3, buttonFSharp3, buttonG3, buttonGSharp3, buttonA3, buttonASharp3, buttonB3, buttonC4,
+        buttonCSharp4, buttonD4, buttonDSharp4, buttonE4, buttonF4, buttonFSharp4, buttonG4, buttonGSharp4, buttonA4, buttonASharp4, buttonB4, buttonC5));
 
 
         for (int i = 0; i < noteIdList.size(); i++)
@@ -206,8 +233,20 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         aSharp3 = new Note(buttonList.get(22), soundBank.aSharp3, soundPool, "aSharp3");
         b3 = new Note(buttonList.get(23), soundBank.b3, soundPool, "b3");
         c4 = new Note(buttonList.get(24), soundBank.c4, soundPool, "c4");
+        cSharp4 = new Note(buttonList.get(25), soundBank.cSharp4, soundPool, "cSharp4");
+        d4 = new Note(buttonList.get(26), soundBank.d4, soundPool, "d4");
+        dSharp4 = new Note(buttonList.get(27), soundBank.dSharp4, soundPool, "dSharp4");
+        e4 = new Note(buttonList.get(28), soundBank.e4, soundPool, "e4");
+        f4 = new Note(buttonList.get(29), soundBank.f4, soundPool, "f4");
+        fSharp4 = new Note(buttonList.get(30), soundBank.fSharp4, soundPool, "fSharp4");
+        g4 = new Note(buttonList.get(31), soundBank.g4, soundPool, "g4");
+        gSharp4 = new Note(buttonList.get(32), soundBank.gSharp4, soundPool, "gSharp4");
+        a4 = new Note(buttonList.get(33), soundBank.a4, soundPool, "a4");
+        aSharp4 = new Note(buttonList.get(34), soundBank.aSharp4, soundPool, "aSharp4");
+        b4 = new Note(buttonList.get(35), soundBank.b4, soundPool, "b4");
+        c5 = new Note(buttonList.get(36), soundBank.c5, soundPool, "c5");
 
-        noteList = new ArrayList<>(Arrays.asList(c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4));
+        noteList = new ArrayList<>(Arrays.asList(c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4, cSharp4, d4, dSharp4, e4, f4, fSharp4, g4, gSharp4, a4, aSharp4, b4, c5));
     }
 
 
@@ -258,6 +297,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             // start playing when touch is held down
             case MotionEvent.ACTION_DOWN:
             {
+                Log.d(TAG, "Now playing" + note.getNoteName());
                 playNote(note, event, volume);
                 break;
             }
@@ -424,7 +464,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         }
         else if (aftSelect.equals("Vibrato Intensity"))
         {
-            float offset = (event.getY())/7000;
+            float offset = (event.getY())/14000;
             Log.d(TAG,"offset = " + offset);
             float lowerBound = 1 - offset;
             float upperBound = 1 + offset;

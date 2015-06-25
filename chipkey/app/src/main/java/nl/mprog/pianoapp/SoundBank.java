@@ -18,17 +18,17 @@ import java.util.TimerTask;
 public class SoundBank {
 
     private String instrument;
-    private SoundPool soundPool;
+    private SoundPool soundPool, soundPool2;
     private Context ctx;
     private Boolean loaded = false;
-    private HashMap<Button, Integer> soundMap = new HashMap<>();
     public ArrayList<Integer> idList;
 
-    public int c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4;
+    public int c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4, cSharp4, d4, dSharp4, e4, f4, fSharp4, g4, gSharp4, a4, aSharp4, b4, c5;
 
     public SoundBank(Context context) {
         ctx = context;
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        soundPool2 = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
 
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener()
         {
@@ -43,7 +43,7 @@ public class SoundBank {
 
         Log.d("Main", "Note ID " + c2);
         idList = new ArrayList<>(Arrays.asList(c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2,
-                gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4));
+                gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4, cSharp4, d4, dSharp4, e4, f4, fSharp4, g4, gSharp4, a4, aSharp4, b4, c5));
         Log.d("Main", "Note ID " + idList.get(0));
 
     }
@@ -113,6 +113,30 @@ public class SoundBank {
         b3 = soundPool.load(ctx, resId, 1);
         resId = getResId(instrument, "c4", packageName);
         c4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "csharp4", packageName);
+        cSharp4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "d4", packageName);
+        d4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "dsharp4", packageName);
+        dSharp4 = soundPool.load(ctx,resId, 1);
+        resId = getResId(instrument, "e4", packageName);
+        e4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "f4", packageName);
+        f4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "fsharp4", packageName);
+        fSharp4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "g4", packageName);
+        g4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "gsharp4", packageName);
+        gSharp4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "a4", packageName);
+        a4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "asharp4", packageName);
+        aSharp4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "b4", packageName);
+        b4 = soundPool.load(ctx, resId, 1);
+        resId = getResId(instrument, "c5", packageName);
+        c5 = soundPool.load(ctx, resId, 1);
 
     }
 
@@ -125,6 +149,11 @@ public class SoundBank {
     public SoundPool getSoundPool()
     {
         return soundPool;
+    }
+
+    public SoundPool getSoundPool2()
+    {
+        return soundPool2;
     }
 
     public void stopAllSounds()

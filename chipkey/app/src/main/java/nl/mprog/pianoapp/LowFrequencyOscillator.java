@@ -17,10 +17,7 @@ public class LowFrequencyOscillator
     private boolean playing = false;
     LFOTimer downwardTimer, upwardTimer;
 
-    public LowFrequencyOscillator()
-    {
-        Log.d("LFO", "Created");
-    }
+    public LowFrequencyOscillator(){}
 
 
     // set amplitude of generated wave
@@ -30,8 +27,6 @@ public class LowFrequencyOscillator
         upperBound = upper;
         currentPitch = upperBound - lowerBound;
         pitchStep = (currentPitch)/STEPS;
-        Log.d("LFO", "Intensity" + pitchStep);
-        Log.d("LFO", "Pitch" + currentPitch);
     }
 
     // set rate of generated wave
@@ -48,7 +43,7 @@ public class LowFrequencyOscillator
         noteList.add(note);
         Log.d("LFO", "Size of list = " + noteList.size());
 
-        //start generating LFO values only if it's the first note
+        //start generating new LFO values only if it's the first note
         if (noteList.size() == 1)
         {
             downWard();
@@ -85,7 +80,6 @@ public class LowFrequencyOscillator
     public void downWard()
     {
         phase = "down";
-        Log.d("LFO", "Downward start");
         downwardTimer = new LFOTimer(timeRate, timeStep, pitchStep, upperBound, phase);
         downwardTimer.start();
     }
@@ -99,7 +93,6 @@ public class LowFrequencyOscillator
         {
             super(startTime, interval);
             mainPitch = pitch;
-            Log.d("LFO", "initialPitch = " + mainPitch);
             pitchMove = timerStep;
             waveDirection = direction;
         }
@@ -131,12 +124,10 @@ public class LowFrequencyOscillator
             if (waveDirection.equals("up"))
             {
                 mainPitch = mainPitch + pitchMove;
-                Log.d("LFO", "Going up!");
             }
             else
             {
                 mainPitch = mainPitch - pitchMove;
-                Log.d("LFO", "Going down!");
             }
 
             // set pitch for every note currently playing
@@ -145,7 +136,6 @@ public class LowFrequencyOscillator
                 noteList.get(i).setPitch(mainPitch);
 
             }
-            Log.d("LFO", "Pitch= " +mainPitch);
 
         }
     }

@@ -24,6 +24,7 @@ public class FXActivity extends ActionBarActivity {
     VerticalSeekBar attackBar, decayBar, sustainBar, releaseBar;
     private boolean vibrato = false;
     TextView seekBarValue;
+    ToggleButton vButton;
 
 
 
@@ -37,7 +38,10 @@ public class FXActivity extends ActionBarActivity {
         {
             afterTouch = extras.getString("aftSelect");
             modWheel = extras.getString("modSelect");
+            vibrato = extras.getBoolean("vibrato");
         }
+        vButton = (ToggleButton) findViewById(R.id.toggleButton);
+        vButton.setChecked(vibrato);
 
 
         seekBarValue = (TextView) findViewById(R.id.seekBarValue);
@@ -116,15 +120,11 @@ public class FXActivity extends ActionBarActivity {
                 seekBarValue.setText(String.valueOf(progress));
             }
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar)
-            {
-
-            }
+            {}
         });
     }
 
