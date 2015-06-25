@@ -1,27 +1,28 @@
-# Piano App
-Piano Instrument Application for Android with SNES sounds
+# Chipkey
+
+Instrument Application for Android with NES sample set and piano-style UI.
 
 ## Idea 
 
-This application will allow the user to use the touch screen of their android phone/tablet to control a virtual representation
-of a piano. On hitting a key, the corresponding sound file is played. This application is intended to either be used by musicians
-to quickly try out new ideas on the go, or by anyone with a hankering for mid-1990s era videogame sounds.
+This application will allow the user to use the touch screen of their android phone/tablet to control a virtual representation of a piano. On hitting a key, the corresponding sound file is played. This application is intended to either be used by musicians to quickly try out new ideas on the go, or by anyone with a hankering for mid-1990s era videogame sounds.
 
 Although many similar applications exist, they are often limited by the fact that touch screens on a lot of devices aren't
-pressure-sensitive. Because of this, most piano applications sound somewhat lifeless because each note can only be played at a
-single velocity. This application intends to solve this problem by letting the exact location where each key is tapped play a note at different velocities (hitting it near the top produces softer notes, getting closer to the bottom produces louder notes.)
+pressure-sensitive. Because of this, most piano applications sound somewhat lifeless because each note can only be played at a single velocity. This application intends to solve this problem by letting the exact location where each key is tapped play a note at different velocities (hitting it near the top produces softer notes, getting closer to the bottom produces louder notes.)
 
-Functionally this means that rather than a single set of audio samples, the application will use at least 3 sets, corresponding with 3 levels of velocity.
+Aside from controlling the initial note volume by using the touch location to determine it, the piano has a programmable aftertouch functionality, which can be set to control volume, pitch or vibrato intensity. This means that, for example, a user can cause a note to oscillate in volume by moving their finger up and down while holding the key down.
 
-Additionally, in order to differentiate itself from similar applications, rather than trying to approximate existing instruments with maximum fidelity, the soundset used will be downsampled to conform with the standards of the .SPC format (used on the Super Nintendo Entertainment System videogame console). The benefit of this is that the comparatively small size of audio files allows for the program incorporate many different instrument sets.
+As a secondary audio parameter controller, the application boasts a programmable mod wheel as well. This can be set to control, for example, the time it takes for a note to fade in or fade out.
+
+In addition to the volume envelope and manual pitch and volume control, the application boasts a simple LFO (low frequency oscillator) that can be set to control a notes pitch in a semi-automated fashion, causing it to rapidly oscillate and produce a vibrato effect.
+
+Additionally, in order to differentiate itself from similar applications, rather than trying to approximate existing instruments with maximum fidelity, the soundset used will be downsampled to conform with the standards of the .SPC format (used on the Nintendo Entertainment System videogame console). The application thus distinguishes itself from its peers by u
 
 ## Features
 
-- Playable 25-key piano-style user interface ( Amount of keys not set in stone just yet, depends on available screen space)
+- Scrollable 25-key piano-style user interface
 - Buttons to shift between octaves to functionally allow users access to the entire 88-key range of a piano.
 - Multiple velocity layers for each soundset corresponding to key location.
-- Multiple instrument soundsets (At least Piano, Strings, Electric Bass and Drums)
-- Authentic SNES-style instrument sounds.
+- Authentic NES-style instrument sounds.
 
 ### Possible additional features (if feasible within time and technology constraints)
 
@@ -44,4 +45,4 @@ Additionally, in order to differentiate itself from similar applications, rather
 
 
 ## Sketches
-<img src="https://github.com/Jorendb9/piano-app/blob/master/imgs/Sketch.png?raw=true width="220" height="400" />
+<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/Sketch.png?raw=true width="220" height="400" />
