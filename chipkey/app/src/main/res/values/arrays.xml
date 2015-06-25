@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string-array name="modWheel">
+        <item>Attack</item>
+        <item>Decay</item>
+        <item>Release</item>
+        <item>Vibrato Rate</item>
+    </string-array>
+
+    <string-array name="afterTouch">
+        <item>None</item>
+        <item>Volume</item>
+        <item>Pitch</item>
+        <item>Vibrato Intensity</item>
+    </string-array>
+</resources>
