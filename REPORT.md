@@ -55,6 +55,8 @@ The ADSR values themselves can either be mapped to the Mod Wheel or controlled t
 
 ### Low Frequency Oscillator
 
+<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/Triangle_Wave.jpg?raw=true width="220" height="400" />
+
 #### Overview & Explanation
 
 An LFO is another synthesizer staple. It generates a signal (or in this applications' case a series of values) similar to a rhythmic pulse or sweep, and is often used to modulate a synthesizers' parameters in a controlled, automated fashion. In the case of this application the LFO is effectively the backend of the Vibrato functionality. Vibrato is a musical effect where a sounds' pitch is rapidly modulated around its 'central' pitch, and is typically considered aesthetically pleasing (though in the case of this application mileage may vary).
