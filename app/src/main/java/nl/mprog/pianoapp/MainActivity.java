@@ -32,8 +32,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private int releaseTime = 0, attackTime = 0, decayTime = 0;
     private float sustain = 0.5f;
     private boolean vibrato = false;
-    private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000, MINIMUM_VALUE = 10;
-    private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
+
     public static String PACKAGE_NAME, TAG = "Main";
     private ArrayList<Integer> noteIdList;
     private ArrayList<Note> noteList;
@@ -42,6 +41,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private SoundPool soundPool;
     private Note c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4;
     private LowFrequencyOscillator lfo;
+
+    private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000, MINIMUM_VALUE = 10, DEF_RATE = 120, ENV_MULTIPLIER = 1000;
+    private static final float DEF_INTENSITY_MIN = 0.95f , DEF_INTENSITY_MAX = 1.05f;
+    private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
 
 
 
@@ -53,8 +56,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         PACKAGE_NAME = getApplicationContext().getPackageName();
 
         lfo = new LowFrequencyOscillator();
-        lfo.setIntensity(0.95f, 1.05f);
-        lfo.setRate(120);
+        lfo.setIntensity(DEF_INTENSITY_MIN, DEF_INTENSITY_MAX);
+        lfo.setRate(DEF_RATE);
         soundBank = new SoundBank(getApplicationContext());
         soundBank.setInstrument("square");
         soundBank.loadSounds(PACKAGE_NAME);
@@ -68,7 +71,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     private float logScale(float value)
     {
-        //make a logarithmic scale based on value from seekbar
+        //make a logarithmic scale based on value from seekBar
         return(float) (LOG_MIN+(value-SEEKBAR_MIN)*(LOG_MAX - LOG_MIN)/(SEEKBAR_MAX-SEEKBAR_MIN));
     }
 
@@ -96,16 +99,15 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 float temp = seekBar.getProgress();
                 if (modSelect.equals("Attack"))
                 {
-                    attackTime = (int) (1000 * logScale(temp));
-
+                    attackTime = (int) (ENV_MULTIPLIER * logScale(temp));
                 }
                 else if (modSelect.equals("Release"))
                 {
-                    releaseTime = (int) (1000 * logScale(temp));
+                    releaseTime = (int) (ENV_MULTIPLIER * logScale(temp));
                 }
                 else if (modSelect.equals("Decay"))
                 {
-                    decayTime = (int) (1000 * logScale(temp));
+                    decayTime = (int) (ENV_MULTIPLIER * logScale(temp));
                 }
 
             }
@@ -132,7 +134,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
     // assign buttons to onTouchListener
-    public void initButtons(){
+    public void initButtons()
+    {
 
         noteIdList = new ArrayList<>(Arrays.asList(R.id.c2, R.id.cSharp2, R.id.d2, R.id.dSharp2, R.id.e2, R.id.f2,
         R.id.fSharp2, R.id.g2, R.id.gSharp2, R.id.a2, R.id.aSharp2, R.id.b2, R.id.c3, R.id.cSharp3, R.id.d3,
@@ -174,10 +177,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             register(noteIdList.get(i));
         }
 
-
-
     }
 
+
+    // initialize note objects
     public void initNotes()
     {
         c2 = new Note(buttonList.get(0), soundBank.c2, soundPool, "c2");
@@ -209,6 +212,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         noteList = new ArrayList<>(Arrays.asList(c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4));
     }
 
+
     public Note getNote (String id)
     {
         for (int i = 0; i < noteList.size(); i++)
@@ -228,6 +232,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     {
         if (soundBank.loaded())
         {
+            // select correct note to play based on given view Id
             String tempId = v.getResources().getResourceName(v.getId()).substring(21);
             Note currentNote = getNote(tempId);
             if (currentNote!= null)
@@ -244,6 +249,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
 
+
     public boolean motionHandler(MotionEvent event, Note note)
     {
 
@@ -251,13 +257,14 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         switch (event.getAction())
         {
+            // start playing when touch is held down
             case MotionEvent.ACTION_DOWN:
-
-                // only play note if ADSR envelope allows it
-
+            {
                 playNote(note, event, volume);
                 break;
+            }
 
+            // apply aftertouch effects during playing
             case MotionEvent.ACTION_MOVE:
             {
                 AfterTouchHandler(event, note);
@@ -266,8 +273,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
             // stop playing when touch is released
             case MotionEvent.ACTION_UP:
+            {
                 stopNote(note);
                 break;
+            }
         }
         return true;
     }
@@ -280,7 +289,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         // show visual pressure feedback
         note.getTrigger().setPressed(true);
 
-        // account for volume envelope variables
+        // only play note if ADSR envelope allows it
         if (attackTime + decayTime + sustain + releaseTime !=0)
         {
             note.setEnvelope(attackTime, decayTime, sustain, releaseTime);
@@ -289,23 +298,30 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
             // prevent conflicts if the same note is already playing
-            if (note.getPhase().equals("Release")) {
+            if (note.getPhase().equals("Release"))
+            {
                 Log.d(TAG, "still playing!");
                 note.interrupt();
                 note.stop();
             }
 
             // play note but only use attack fade-in if variable is significant
-            if (note.getA() > MINIMUM_VALUE) {
+            if (note.getA() > MINIMUM_VALUE)
+            {
                 note.play(0);
                 note.attack(volume);
-            } else if (note.getD() > MINIMUM_VALUE) {
+            }
+            else if (note.getD() > MINIMUM_VALUE)
+            {
                 note.play(volume);
                 note.decay();
-            } else {
+            }
+            else
+            {
                 note.play(volume);
             }
-            if (vibrato) {
+            if (vibrato)
+            {
                 lfo.startVibrato(note);
             }
         }
@@ -319,7 +335,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         {
             lfo.stopVibrato(note);
         }
-        // interrupt phase
+
+        // interrupt phases as necessary
         if (note.getPhase().equals("Attack"))
         {
             note.interruptAttack();
@@ -328,6 +345,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         {
             note.interruptDecay();
         }
+
+        // only use release fadeout if variable is significant
         if (note.getR() > 0)
         {
             note.release();
@@ -343,30 +362,51 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 1) {
-            if(resultCode == RESULT_OK){
-                aftSelect = data.getStringExtra("afterTouch");
-                modSelect = data.getStringExtra("modWheel");
-                releaseTime = (int)(1000 * logScale(data.getIntExtra("release", 0)));
-                attackTime = (int)(1000 * logScale(data.getIntExtra("attack", 0)));
-                decayTime = (int)(1000 * logScale(data.getIntExtra("decay", 0)));
-                sustain = (data.getIntExtra("sustain", 0))/700;
-                Log.d(TAG, "Sustain2 = " + sustain);
-                vibrato = (data.getBooleanExtra("vibrato", false));
+            if(resultCode == RESULT_OK)
+            {
+                retrieveFXSettings(data);
                 if (sustain >= 1)
                 {
                     sustain = 0.99f;
                 }
                 Log.d(TAG, "Sustain2 = " + sustain);
 
-                if ((attackTime > 0 || decayTime > 0) && aftSelect.equals("volume"))
-                {
-                    aftSelect = "Off";
-                }
+                preventVolumeConflicts();
+                preventPitchConflicts();
             }
-            if (resultCode == RESULT_CANCELED) {
-                Log.d("1", "no result");
+            if (resultCode == RESULT_CANCELED)
+            {
+                Log.d(TAG, "no result");
             }
         }
+    }
+
+    public void preventVolumeConflicts()
+    {
+        if ((attackTime > 0 || decayTime > 0) && aftSelect.equals("Volume"))
+        {
+            aftSelect = "Off";
+        }
+    }
+
+    public void preventPitchConflicts()
+    {
+        if (vibrato && aftSelect.equals("Pitch"))
+        {
+            aftSelect = "Off";
+        }
+    }
+
+    public void retrieveFXSettings (Intent data)
+    {
+        aftSelect = data.getStringExtra("afterTouch");
+        modSelect = data.getStringExtra("modWheel");
+        releaseTime = (int)(1000 * logScale(data.getIntExtra("release", 0)));
+        attackTime = (int)(1000 * logScale(data.getIntExtra("attack", 0)));
+        decayTime = (int)(1000 * logScale(data.getIntExtra("decay", 0)));
+        sustain = (data.getIntExtra("sustain", 0))/700;
+        Log.d(TAG, "Sustain2 = " + sustain);
+        vibrato = (data.getBooleanExtra("vibrato", false));
     }
 
 

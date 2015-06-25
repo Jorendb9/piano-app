@@ -3,10 +3,10 @@
 
 
     <string-array name="modWheel">
-        <item>Release</item>
         <item>Attack</item>
-        <item>Volume</item>
-        <item>Pitch</item>
+        <item>Decay</item>
+        <item>Release</item>
+        <item>Vibrato Rate</item>
     </string-array>
 
     <string-array name="afterTouch">

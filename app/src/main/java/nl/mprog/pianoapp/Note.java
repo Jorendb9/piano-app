@@ -170,12 +170,16 @@ public class Note
         {
             Log.d(TAG,"Timer finished");
             this.cancel();
+
+            // stop playing after decay or release
             if (phase.equals("Release") || (phase.equals("Decay") && s == 0))
             {
                 soundPool.stop(stream);
                 playing = false;
                 phase = "Idle";
             }
+
+            // instantly go to decay after attack phase if variables are significant
             else if (phase.equals("Attack") && d> 0 && s < volume)
             {
                 phase = "Decay";
@@ -187,6 +191,7 @@ public class Note
             }
         }
 
+        // update note volume every tick
         @Override
         public void onTick(long millisUntilFinished)
         {

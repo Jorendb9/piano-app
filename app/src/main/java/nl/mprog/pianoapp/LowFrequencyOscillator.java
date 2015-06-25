@@ -3,13 +3,15 @@ package nl.mprog.pianoapp;
 import android.os.CountDownTimer;
 import android.util.Log;
 
-/**
- * Created by PC on 18-6-2015.
- */
+import java.util.ArrayList;
+
+
+// generates values corresponding to the shape of a triangular wave
 public class LowFrequencyOscillator
 {
     float pitchStep, currentPitch, lowerBound, upperBound;
     Note currentNote;
+    ArrayList<Note> noteList;
     private String phase = "down";
     final static int STEPS = 100;
     Long timeRate, timeStep;
@@ -20,6 +22,9 @@ public class LowFrequencyOscillator
     {
         Log.d("LFO", "Created");
     }
+
+
+    // set amplitude of generated wave
     public void setIntensity(float lower, float upper)
     {
         lowerBound = lower;
@@ -30,16 +35,18 @@ public class LowFrequencyOscillator
         Log.d("LFO", "Pitch" + currentPitch);
     }
 
+    // set rate of generated wave
     public void setRate(long rate)
     {
         timeRate = rate;
         timeStep = rate/STEPS;
     }
 
+
     public void startVibrato(Note note)
     {
         Log.d("LFO", "Vibrato start");
-        currentNote = note;
+        noteList.add(note);
         downWard();
     }
 
@@ -47,10 +54,15 @@ public class LowFrequencyOscillator
     public void stopVibrato(Note note)
     {
         Log.d("LFO", "Vibrato stop");
-        currentNote = note;
-        if (phase.equals("down"))
-        stopDown();
-        stopUp();
+        noteList.remove(note);
+
+
+        // stop running LFO when no notes are playing
+        if (noteList.isEmpty())
+        {
+            stopDown();
+            stopUp();
+        }
     }
 
     public void stopDown()
@@ -63,6 +75,8 @@ public class LowFrequencyOscillator
         upwardTimer.cancel();
     }
 
+
+    // start timer to simulate downward motion of wave
     public void downWard()
     {
         phase = "down";
@@ -79,15 +93,15 @@ public class LowFrequencyOscillator
         upwardTimer.start();
     }
 
+
+
     public class LFOTimer extends CountDownTimer
     {
         private float pitchMove, mainPitch;
-        private boolean countingDown = false;
         private String waveDirection = "up";
         public LFOTimer(long startTime, long interval, float timerStep, float pitch, String direction)
         {
             super(startTime, interval);
-            countingDown = false;
             mainPitch = pitch;
             Log.d("LFO", "initialPitch = " + mainPitch);
             pitchMove = timerStep;
@@ -97,6 +111,7 @@ public class LowFrequencyOscillator
         @Override
         public void onFinish()
         {
+            // start timer in the opposite direction when finished
             this.cancel();
             if (waveDirection.equals("down"))
             {
@@ -113,11 +128,7 @@ public class LowFrequencyOscillator
 
         }
 
-        public Boolean checkCountingDown()
-        {
-            return countingDown;
-        }
-
+        // update note pitch every tick
         @Override
         public void onTick(long millisUntilFinished)
         {
@@ -131,7 +142,13 @@ public class LowFrequencyOscillator
                 mainPitch = mainPitch - pitchMove;
                 Log.d("LFO", "Going down!");
             }
-            currentNote.setPitch(mainPitch);
+
+            // set pitch for every note currently playing
+            for (int i= 0; i< noteList.size(); i++)
+            {
+                noteList.get(i).setPitch(mainPitch);
+
+            }
             Log.d("LFO", "Pitch= " +mainPitch);
 
         }
