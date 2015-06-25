@@ -20,7 +20,6 @@ public class FXActivity extends ActionBarActivity {
     private final static int TIME_MAX = 5000, VOLUME_MAX = 700;
     VerticalSeekBar attackBar, decayBar, sustainBar, releaseBar;
     private boolean vibrato = false;
-    TextView seekBarValue;
     ToggleButton vButton;
 
 
@@ -40,8 +39,6 @@ public class FXActivity extends ActionBarActivity {
         vButton = (ToggleButton) findViewById(R.id.toggleButton);
         vButton.setChecked(vibrato);
 
-
-        seekBarValue = (TextView) findViewById(R.id.seekBarValue);
 
         initSpinners();
         initSeekBars();
@@ -114,7 +111,6 @@ public class FXActivity extends ActionBarActivity {
                 {
                     release = progress;
                 }
-                seekBarValue.setText(String.valueOf(progress));
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}

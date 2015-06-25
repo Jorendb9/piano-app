@@ -76,6 +76,7 @@
     <LinearLayout
         android:layout_width="350dp"
         android:layout_height="220dp"
+        android:layout_marginLeft="20dp"
         android:layout_toRightOf="@id/LinearLayout"
         android:layout_toEndOf="@id/LinearLayout"
         android:orientation="horizontal"
@@ -86,37 +87,32 @@
             android:layout_height="200dp"
             android:layout_marginRight="40dp"
             android:layout_marginEnd="40dp"
-            android:id="@+id/attackBar"/>
+            android:id="@+id/attackBar"
+            android:thumb="@drawable/vertical"/>
 
         <nl.mprog.pianoapp.VerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:layout_marginRight="40dp"
             android:layout_marginEnd="40dp"
-            android:id="@+id/decayBar"/>
+            android:id="@+id/decayBar"
+            android:thumb="@drawable/vertical"/>
 
         <nl.mprog.pianoapp.VerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:layout_marginRight="40dp"
             android:layout_marginEnd="40dp"
-            android:id="@+id/sustainBar"/>
+            android:id="@+id/sustainBar"
+            android:thumb="@drawable/vertical"/>
 
         <nl.mprog.pianoapp.VerticalSeekBar
             android:layout_width="wrap_content"
             android:layout_height="200dp"
-            android:id="@+id/releaseBar"/>
+            android:id="@+id/releaseBar"
+            android:thumb="@drawable/vertical"/>
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/seekBarValue"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_alignLeft="@+id/linearLayout2"
-        android:layout_alignStart="@+id/linearLayout2" />
 
     <ToggleButton
         android:layout_width="wrap_content"
@@ -126,32 +122,62 @@
         android:textOn="Vibrato on"
         android:textOff="Vibrato off"
         android:onClick="onToggleClicked"
-        android:layout_above="@+id/seekBarValue"
+        android:layout_above="@+id/button3"
+        android:layout_marginBottom="20dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="攻撃"
+        android:text="Attack"
         android:textColor="@color/white"
         android:textSize="20sp"
+        android:layout_marginLeft="210dp"
+        android:layout_marginStart="210dp"
         android:id="@+id/textView3"
-        android:layout_above="@+id/button3"
-        android:layout_toRightOf="@+id/seekBarValue"
-        android:layout_toEndOf="@+id/seekBarValue" />
+        android:layout_below="@id/linearLayout2"
+        android:layout_toRightOf="@+id/toggleButton"
+        android:layout_toEndOf="@+id/toggleButton" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="減衰"
+        android:text="Decay"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
         android:id="@+id/textView4"
         android:layout_alignBottom="@+id/textView3"
         android:layout_toRightOf="@+id/textView3"
         android:layout_toEndOf="@+id/textView3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sustain"
+        android:id="@+id/textView5"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_alignTop="@+id/textView4"
+        android:layout_toRightOf="@+id/textView4"
+        android:layout_toEndOf="@+id/textView4"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Release"
+        android:id="@+id/textView6"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_alignTop="@+id/textView5"
+        android:layout_toRightOf="@+id/textView5"
+        android:layout_toEndOf="@+id/textView5"/>
 
 
 </RelativeLayout>

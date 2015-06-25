@@ -31,7 +31,8 @@
             android:id="@+id/seekBar"
             android:layout_marginLeft="30dp"
             android:layout_marginStart="30dp"
-            android:thumb="@drawable/thumb"
+            android:layout_marginTop="10dp"
+            android:thumb="@drawable/horizontal"
             />
 
 
