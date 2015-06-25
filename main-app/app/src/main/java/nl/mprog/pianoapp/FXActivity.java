@@ -20,6 +20,7 @@ public class FXActivity extends ActionBarActivity {
     private String afterTouch, modWheel;
     private Spinner spinnerAft, spinnerMod;
     private int release = 0, attack = 0, decay = 0, sustain = 700;
+    private final static int TIME_MAX = 5000, VOLUME_MAX = 700;
     VerticalSeekBar attackBar, decayBar, sustainBar, releaseBar;
     private boolean vibrato = false;
     TextView seekBarValue;
@@ -50,9 +51,11 @@ public class FXActivity extends ActionBarActivity {
     {
         spinnerMod=(Spinner) findViewById(R.id.spinnerMod);
         spinnerAft=(Spinner) findViewById(R.id.spinnerAft);
+        // set spinners initial setting to whatever value was selected before
         spinnerMod.setSelection(getIndex(spinnerMod, modWheel));
         spinnerAft.setSelection(getIndex(spinnerAft, afterTouch));
     }
+
 
     private int getIndex(Spinner spinner, String selection)
     {
@@ -76,10 +79,10 @@ public class FXActivity extends ActionBarActivity {
         sustainBar = (VerticalSeekBar) findViewById(R.id.sustainBar);
         releaseBar = (VerticalSeekBar) findViewById(R.id.releaseBar);
 
-        attackBar.setMax(5000);
-        decayBar.setMax(5000);
-        sustainBar.setMax(700);
-        releaseBar.setMax(5000);
+        attackBar.setMax(TIME_MAX);
+        decayBar.setMax(TIME_MAX);
+        sustainBar.setMax(VOLUME_MAX);
+        releaseBar.setMax(TIME_MAX);
         sustainBar.setProgress(sustainBar.getMax());
         seekBarSetup(attackBar);
         seekBarSetup(decayBar);
@@ -109,7 +112,6 @@ public class FXActivity extends ActionBarActivity {
                 if (seekBar == releaseBar)
                 {
                     release = progress;
-
                 }
                 seekBarValue.setText(String.valueOf(progress));
             }
@@ -150,6 +152,13 @@ public class FXActivity extends ActionBarActivity {
     {
         afterTouch = spinnerAft.getSelectedItem().toString();
         modWheel = spinnerMod.getSelectedItem().toString();
+        returnFXSettings();
+        finish();
+    }
+
+
+    public void returnFXSettings()
+    {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("attack", attack);
         returnIntent.putExtra("decay", decay);
@@ -159,12 +168,12 @@ public class FXActivity extends ActionBarActivity {
         returnIntent.putExtra("modWheel",modWheel);
         returnIntent.putExtra("vibrato", vibrato);
         setResult(RESULT_OK,returnIntent);
-        finish();
+
     }
 
     public void onToggleClicked(View view)
     {
-        // Is the toggle on?
+        // toggle is linked to vibrato variable
         vibrato = ((ToggleButton) view).isChecked();
     }
 

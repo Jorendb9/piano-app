@@ -77,7 +77,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
 
-    //set up seekbar
+    //set up seekBar
     public void modWheelSetup()
     {
         SeekBar modWheel = (SeekBar)findViewById(R.id.seekBar);
@@ -86,12 +86,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         modWheel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
@@ -458,7 +456,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         {
             @Override
             public void run() {
-                Log.d("1", "Note released!");
+                Log.d(TAG, "Note released!");
                 note.stop();
             }
 
