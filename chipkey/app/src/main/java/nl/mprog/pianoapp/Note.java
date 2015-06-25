@@ -179,6 +179,7 @@ public class Note
                 phase = "Decay";
                 final long timeStep = (long)d/STEPS;
                 final float volumeStep = (volume-s)/STEPS;
+
                 decayTimer = new FadeOutTimer(d, timeStep, volumeStep, volume);
                 decayTimer.start();
             }

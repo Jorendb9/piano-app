@@ -420,7 +420,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         releaseTime = (int)(ENV_MULTIPLIER * logScale(data.getIntExtra("release", 0)));
         attackTime = (int)(ENV_MULTIPLIER * logScale(data.getIntExtra("attack", 0)));
         decayTime = (int)(ENV_MULTIPLIER * logScale(data.getIntExtra("decay", 0)));
-        sustain = (data.getIntExtra("sustain", 0))/700;
+        sustain = (data.getFloatExtra("sustain", 0))/700;
         vibrato = (data.getBooleanExtra("vibrato", false));
     }
 

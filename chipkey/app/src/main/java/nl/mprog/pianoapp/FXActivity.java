@@ -16,7 +16,8 @@ public class FXActivity extends ActionBarActivity {
 
     private String afterTouch, modWheel;
     private Spinner spinnerAft, spinnerMod;
-    private int release = 0, attack = 0, decay = 0, sustain = 700;
+    private int release = 0, attack = 0, decay = 0;
+    private float sustain = 700;
     private final static int TIME_MAX = 5000, VOLUME_MAX = 700;
     VerticalSeekBar attackBar, decayBar, sustainBar, releaseBar;
     private boolean vibrato = false;
