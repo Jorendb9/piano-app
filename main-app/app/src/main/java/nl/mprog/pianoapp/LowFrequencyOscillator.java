@@ -11,7 +11,7 @@ public class LowFrequencyOscillator
 {
     float pitchStep, currentPitch, lowerBound, upperBound;
     Note currentNote;
-    ArrayList<Note> noteList;
+    ArrayList<Note> noteList = new ArrayList<>();
     private String phase = "down";
     final static int STEPS = 100;
     Long timeRate, timeStep;
@@ -47,7 +47,14 @@ public class LowFrequencyOscillator
     {
         Log.d("LFO", "Vibrato start");
         noteList.add(note);
-        downWard();
+        Log.d("LFO", "Size of list = " + noteList.size());
+
+        //start generating LFO values only if it's the first note
+        if (noteList.size() == 1)
+        {
+            downWard();
+        }
+
     }
 
 
