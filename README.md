@@ -27,4 +27,5 @@ Additionally, in order to differentiate itself from similar applications, rather
 
 
 ## Images
-<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/Sketch.png?raw=true width="220" height="400" />
+<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/main.png?raw=true width="220" height="400" />
+<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/fx_activity.png?raw=true width="220" height="400" />
