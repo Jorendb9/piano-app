@@ -56,7 +56,6 @@ public class LowFrequencyOscillator
         Log.d("LFO", "Vibrato stop");
         noteList.remove(note);
 
-
         // stop running LFO when no notes are playing
         if (noteList.isEmpty())
         {
@@ -84,15 +83,6 @@ public class LowFrequencyOscillator
         downwardTimer = new LFOTimer(timeRate, timeStep, pitchStep, upperBound, phase);
         downwardTimer.start();
     }
-
-    public void upWard()
-    {
-        phase = "up";
-        Log.d("LFO", "Upward start");
-        upwardTimer = new LFOTimer(timeRate, timeStep, pitchStep, lowerBound, phase);
-        upwardTimer.start();
-    }
-
 
 
     public class LFOTimer extends CountDownTimer

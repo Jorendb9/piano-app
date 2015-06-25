@@ -399,9 +399,9 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     {
         aftSelect = data.getStringExtra("afterTouch");
         modSelect = data.getStringExtra("modWheel");
-        releaseTime = (int)(1000 * logScale(data.getIntExtra("release", 0)));
-        attackTime = (int)(1000 * logScale(data.getIntExtra("attack", 0)));
-        decayTime = (int)(1000 * logScale(data.getIntExtra("decay", 0)));
+        releaseTime = (int)(ENV_MULTIPLIER * logScale(data.getIntExtra("release", 0)));
+        attackTime = (int)(ENV_MULTIPLIER * logScale(data.getIntExtra("attack", 0)));
+        decayTime = (int)(ENV_MULTIPLIER * logScale(data.getIntExtra("decay", 0)));
         sustain = (data.getIntExtra("sustain", 0))/700;
         Log.d(TAG, "Sustain2 = " + sustain);
         vibrato = (data.getBooleanExtra("vibrato", false));
@@ -414,7 +414,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         if (aftSelect.equals("Pitch"))
         {
-            float pitch = (float)(volumeConverter(event.getY()) -0.6) /20 + 1;
+            float pitch = (float)((volumeConverter(event.getY()) -0.6)/20) + 1;
             note.setPitch(pitch);
         }
         else if (aftSelect.equals("Volume"))
