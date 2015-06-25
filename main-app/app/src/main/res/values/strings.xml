@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">Piano App</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="piano">piano</string>
-    <string name="title_activity_fx">FXActivity</string>
-</resources>
