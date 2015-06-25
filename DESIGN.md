@@ -14,7 +14,7 @@ As shown in the image below, each 'key' on the piano is divided into three click
 
 This method is currently fairly crude, but increasing the amount of subdivisions for each key could make the variations in volume far more gradual and 'natural'. Another possible improvement would be to use a single clickable area for each key but to check the y-coordinates of the touch location, and use those to make the program determine the volume level and sample use. 
 
-<img src="https://github.com/Jorendb9/piano-app/blob/master/imgs/Piano%20Sketch.png?raw=true width="220" height="400" />
+<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/Piano%20Sketch.png?raw=true width="220" height="400" />
 
 ### Octaves
 
@@ -39,7 +39,7 @@ GestureDetector.OnGestureListener
 Users can move to the advanced FX settings screen by swiping to the right.
 
 
-<img src="https://github.com/Jorendb9/piano-app/blob/master/imgs/FX%20Screen%20Sketch.png?raw=true width="220" height="400" />
+<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/FX%20Screen%20Sketch.png?raw=true width="220" height="400" />
 
 
 ## The FX activity
