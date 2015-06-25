@@ -1,5 +1,5 @@
-# Piano App
-Piano Instrument Application for Android with SNES sounds
+# Chipkeys
+Instrument Application for Android with NES sample set and piano UI.
 
 ## Idea 
 
@@ -44,4 +44,4 @@ Additionally, in order to differentiate itself from similar applications, rather
 
 
 ## Sketches
-<img src="https://github.com/Jorendb9/piano-app/blob/master/imgs/Sketch.png?raw=true width="220" height="400" />
+<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/Sketch.png?raw=true width="220" height="400" />
