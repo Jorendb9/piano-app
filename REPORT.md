@@ -30,6 +30,8 @@ The Mod Wheels values are converted using a logarithmic scale, which allows the 
 
 ### ADSR Amp Envelope
 
+<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/ADSR.jpg?raw=true width="220" height="400" />
+
 #### Overview & Explanation
 Rather than going straight to discussing implementation of this functionality, it's probably necessary to first give a global overview of what it actually *does*. Amp Envelopes are, like the mod wheel and aftertouch, somewhat standardized functions on many a synthesizer. They allow the user to intelligently control the volume level of each individual note in a semi-automated fashion and impart a lot of versatility to the sound with a fairly low level of controller complexity (using only four values). 
 
@@ -52,6 +54,8 @@ This amount is determined, during the Attack phase for example, by taking the de
 The ADSR values themselves can either be mapped to the Mod Wheel or controlled through four distinct seekBars in the FX Activity screen. 
 
 ### Low Frequency Oscillator
+
+<img src="https://github.com/Jorendb9/piano-app/blob/master/docs/Triangle_Wave.jpg?raw=true width="220" height="400" />
 
 #### Overview & Explanation
 
