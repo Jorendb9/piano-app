@@ -1,7 +1,7 @@
 package nl.mprog.pianoapp;
 
 import android.os.CountDownTimer;
-import android.util.Log;
+
 
 import java.util.ArrayList;
 
@@ -39,10 +39,8 @@ public class LowFrequencyOscillator
 
     public void startVibrato(Note note)
     {
-        Log.d("LFO", "Vibrato start");
-        noteList.add(note);
-        Log.d("LFO", "Size of list = " + noteList.size());
 
+        noteList.add(note);
         //start generating new LFO values only if it's the first note
         if (noteList.size() == 1)
         {
@@ -54,7 +52,6 @@ public class LowFrequencyOscillator
 
     public void stopVibrato(Note note)
     {
-        Log.d("LFO", "Vibrato stop");
         noteList.remove(note);
 
         // stop running LFO when no notes are playing

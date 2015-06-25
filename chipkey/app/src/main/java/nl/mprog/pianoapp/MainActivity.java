@@ -2,27 +2,18 @@ package nl.mprog.pianoapp;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.media.SoundPool;
-import android.media.audiofx.PresetReverb;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.Switch;
-import android.widget.ToggleButton;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+
 
 
 public class MainActivity extends Activity implements View.OnTouchListener {
@@ -41,7 +32,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private Note c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4, cSharp4, d4, dSharp4, e4, f4, fSharp4, g4, gSharp4, a4, aSharp4, b4, c5;
     private LowFrequencyOscillator lfo;
 
-    private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000, MINIMUM_VALUE = 10, ENV_MULTIPLIER = 1000;
+    private static final int SEEKBAR_MIN = 1, SEEKBAR_MAX = 5000, MINIMUM_VALUE = 10, ENV_MULTIPLIER = 1000, PITCH_CENTER = 1;
     private static final float DEF_INTENSITY_MIN = 0.97f , DEF_INTENSITY_MAX = 1.03f;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
 
@@ -116,7 +107,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 else if (modSelect.equals("Vibrato Rate"))
                 {
                     vRate = 350 - (int)(70 * logScale(temp));
-                    Log.d(TAG, "Vibrato Rate = " + vRate);
                     lfo.setRate(vRate);
                 }
 
@@ -259,7 +249,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 return noteList.get(i);
             }
         }
-        Log.d(TAG, " Error: Note not found");
         return null;
     }
 
@@ -275,10 +264,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             if (currentNote!= null)
             {
                 motionHandler(event, currentNote);
-            }
-            else
-            {
-                Log.d(TAG, "Error: no sample loaded!");
             }
         }
         return true;
@@ -297,7 +282,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             // start playing when touch is held down
             case MotionEvent.ACTION_DOWN:
             {
-                Log.d(TAG, "Now playing" + note.getNoteName());
                 playNote(note, event, volume);
                 break;
             }
@@ -338,7 +322,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             // prevent conflicts if the same note is already playing
             if (note.getPhase().equals("Release"))
             {
-                Log.d(TAG, "still playing!");
                 note.interrupt();
                 note.stop();
             }
@@ -407,14 +390,9 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 {
                     sustain = 0.99f;
                 }
-                Log.d(TAG, "Sustain2 = " + sustain);
 
                 preventVolumeConflicts();
                 preventPitchConflicts();
-            }
-            if (resultCode == RESULT_CANCELED)
-            {
-                Log.d(TAG, "no result");
             }
         }
     }
@@ -443,7 +421,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         attackTime = (int)(ENV_MULTIPLIER * logScale(data.getIntExtra("attack", 0)));
         decayTime = (int)(ENV_MULTIPLIER * logScale(data.getIntExtra("decay", 0)));
         sustain = (data.getIntExtra("sustain", 0))/700;
-        Log.d(TAG, "Sustain2 = " + sustain);
         vibrato = (data.getBooleanExtra("vibrato", false));
     }
 
@@ -454,7 +431,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         if (aftSelect.equals("Pitch"))
         {
-            float pitch = (float)((volumeConverter(event.getY()) -0.6)/20) + 1;
+            float pitch = (float)((volumeConverter(event.getY()) -0.6)/20) + PITCH_CENTER;
             note.setPitch(pitch);
         }
         else if (aftSelect.equals("Volume"))
@@ -465,9 +442,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         else if (aftSelect.equals("Vibrato Intensity"))
         {
             float offset = (event.getY())/14000;
-            Log.d(TAG,"offset = " + offset);
-            float lowerBound = 1 - offset;
-            float upperBound = 1 + offset;
+            float lowerBound = PITCH_CENTER - offset;
+            float upperBound = PITCH_CENTER + offset;
             lfo.setIntensity(lowerBound, upperBound);
 
         }
@@ -496,7 +472,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         {
             @Override
             public void run() {
-                Log.d(TAG, "Note released!");
                 note.stop();
             }
 
@@ -505,7 +480,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -514,24 +490,19 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    /*@Override
-    public void onStop()
-    {
-        soundBank.unloadAll();
-        super.onStop();
-    }*/
 }

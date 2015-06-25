@@ -1,14 +1,11 @@
 package nl.mprog.pianoapp;
 
 import android.content.Intent;
-import android.media.audiofx.PresetReverb;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;

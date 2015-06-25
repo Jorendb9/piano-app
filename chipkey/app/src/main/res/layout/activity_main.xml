@@ -48,7 +48,7 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/button2"
             android:layout_toEndOf="@+id/button2"
-            android:background="@drawable/stop"
+            android:background="@drawable/stopbutton"
             android:id="@+id/button" />
 
         <Button

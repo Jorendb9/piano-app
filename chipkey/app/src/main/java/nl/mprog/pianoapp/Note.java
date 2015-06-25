@@ -3,8 +3,6 @@ package nl.mprog.pianoapp;
 
 import android.media.SoundPool;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.util.Log;
 import android.widget.Button;
 
 public class Note
@@ -82,7 +80,6 @@ public class Note
         phase = "Attack";
         final long timeStep = (long)a/STEPS;
         final float volumeStep = targetVolume/STEPS;
-        Log.d(TAG, "Attack Timestep= " + timeStep);
         initialVolume = targetVolume;
         fadeInTimer = new FadeOutTimer(a, timeStep, volumeStep, 0);
         fadeInTimer.start();
@@ -93,7 +90,6 @@ public class Note
         phase = "Decay";
         final long timeStep = (long)d/STEPS;
         final float volumeStep = (initialVolume-s)/STEPS;
-        Log.d(TAG, "Decay Timestep= " + timeStep);
         decayTimer = new FadeOutTimer(d, timeStep, volumeStep, initialVolume);
         decayTimer.start();
     }
@@ -102,7 +98,7 @@ public class Note
     {
         phase = "Idle";
         fadeOutTimer.cancel();
-        Log.d(TAG, "timer canceled!");
+
     }
 
     public String getPhase()
@@ -114,14 +110,14 @@ public class Note
     {
         phase = "Idle";
         fadeInTimer.cancel();
-        Log.d(TAG, "attack canceled!");
+
     }
 
     public void interruptDecay()
     {
         phase = "Idle";
         decayTimer.cancel();
-        Log.d(TAG, "decay canceled!");
+
     }
 
     public void release()
@@ -129,7 +125,6 @@ public class Note
         phase = "Release";
         final long timeStep = (long)r/STEPS;
         final float volumeStep = initialVolume/STEPS;
-        Log.d(TAG, "Timestep= " + timeStep);
         fadeOutTimer = new FadeOutTimer(r, timeStep, volumeStep, initialVolume);
         fadeOutTimer.start();
     }
@@ -168,7 +163,6 @@ public class Note
         @Override
         public void onFinish()
         {
-            Log.d(TAG,"Timer finished");
             this.cancel();
 
             // stop playing after decay or release
@@ -185,7 +179,6 @@ public class Note
                 phase = "Decay";
                 final long timeStep = (long)d/STEPS;
                 final float volumeStep = (volume-s)/STEPS;
-                Log.d(TAG, "Decay Timestep= " + timeStep);
                 decayTimer = new FadeOutTimer(d, timeStep, volumeStep, volume);
                 decayTimer.start();
             }

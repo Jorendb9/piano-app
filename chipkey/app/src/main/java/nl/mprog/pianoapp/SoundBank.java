@@ -3,16 +3,11 @@ package nl.mprog.pianoapp;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.util.Log;
-import android.widget.Button;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 
 public class SoundBank {
@@ -40,11 +35,8 @@ public class SoundBank {
             }
         });
 
-
-        Log.d("Main", "Note ID " + c2);
         idList = new ArrayList<>(Arrays.asList(c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2,
                 gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4, cSharp4, d4, dSharp4, e4, f4, fSharp4, g4, gSharp4, a4, aSharp4, b4, c5));
-        Log.d("Main", "Note ID " + idList.get(0));
 
     }
 
@@ -149,11 +141,6 @@ public class SoundBank {
     public SoundPool getSoundPool()
     {
         return soundPool;
-    }
-
-    public SoundPool getSoundPool2()
-    {
-        return soundPool2;
     }
 
     public void stopAllSounds()
