@@ -14,7 +14,6 @@ public class LowFrequencyOscillator
     private String phase = "down";
     final static int STEPS = 100;
     Long timeRate, timeStep;
-    private boolean playing = false;
     LFOTimer downwardTimer, upwardTimer;
 
     public LowFrequencyOscillator(){}

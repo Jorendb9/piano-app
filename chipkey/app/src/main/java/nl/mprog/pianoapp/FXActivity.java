@@ -96,6 +96,8 @@ public class FXActivity extends ActionBarActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
+
+                // handle results from all 4 bars
                 if (seekBar == attackBar)
                 {
                     attack = progress;

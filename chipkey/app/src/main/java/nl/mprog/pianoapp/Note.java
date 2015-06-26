@@ -13,10 +13,8 @@ public class Note
     private SoundPool soundPool;
     private String noteName;
     final static int STEPS = 100;
-    final static String TAG = "Note";
     FadeOutTimer fadeOutTimer, fadeInTimer, decayTimer;
     private String phase = "Idle";
-    private Boolean playing = false;
 
 
     public Note(Button button, int soundId, SoundPool sounds, String name)
@@ -41,7 +39,6 @@ public class Note
     {
         initialVolume = volume;
         stream = soundPool.play(id, initialVolume, initialVolume, 1, -1, 1f);
-        playing = true;
     }
 
     public void stop()
@@ -65,16 +62,13 @@ public class Note
         return trigger;
     }
 
-    public boolean isPlaying()
-    {
-        return playing;
-    }
-
     public String getNoteName()
     {
         return noteName;
     }
 
+
+    // fade in current sound from 0 to target volume
     public void attack(float targetVolume)
     {
         phase = "Attack";
@@ -85,6 +79,8 @@ public class Note
         fadeInTimer.start();
     }
 
+
+    // fade out current sound from initial volume to sustain volume
     public void decay()
     {
         phase = "Decay";
@@ -120,6 +116,7 @@ public class Note
 
     }
 
+    // fade out current sound from initial volume to 0
     public void release()
     {
         phase = "Release";
@@ -139,12 +136,6 @@ public class Note
         return a;
     }
     public int getD() {return d;}
-
-    public float getS()
-    {
-        return s;
-    }
-
     public int getR(){return r;}
 
     // timer class for gradual fading
@@ -165,11 +156,10 @@ public class Note
         {
             this.cancel();
 
-            // stop playing after decay or release
+            // stop playing sound after decay or release
             if (phase.equals("Release") || (phase.equals("Decay") && s == 0))
             {
                 soundPool.stop(stream);
-                playing = false;
                 phase = "Idle";
             }
 

@@ -13,17 +13,17 @@ import java.util.Arrays;
 public class SoundBank {
 
     private String instrument;
-    private SoundPool soundPool, soundPool2;
+    private SoundPool soundPool;
     private Context ctx;
     private Boolean loaded = false;
     public ArrayList<Integer> idList;
 
     public int c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2, gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4, cSharp4, d4, dSharp4, e4, f4, fSharp4, g4, gSharp4, a4, aSharp4, b4, c5;
 
-    public SoundBank(Context context) {
+    public SoundBank(Context context)
+    {
         ctx = context;
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
-        soundPool2 = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
 
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener()
         {
@@ -36,7 +36,7 @@ public class SoundBank {
         });
 
         idList = new ArrayList<>(Arrays.asList(c2, cSharp2, d2, dSharp2, e2, f2, fSharp2, g2,
-                gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4, cSharp4, d4, dSharp4, e4, f4, fSharp4, g4, gSharp4, a4, aSharp4, b4, c5));
+        gSharp2, a2, aSharp2, b2, c3, cSharp3, d3, dSharp3, e3, f3, fSharp3, g3, gSharp3, a3, aSharp3, b3, c4, cSharp4, d4, dSharp4, e4, f4, fSharp4, g4, gSharp4, a4, aSharp4, b4, c5));
 
     }
 
@@ -132,6 +132,7 @@ public class SoundBank {
 
     }
 
+    // use instrument string name to find the proper audio sample resource
     public int getResId(String instrument, String note, String packageName)
     {
         String tempString = instrument + note;
@@ -152,19 +153,5 @@ public class SoundBank {
     {
         return loaded;
     }
-
-    public void unloadAll()
-    {
-        soundPool.release();
-    }
-
-
-
-
-
-
-
-
-
 
 }

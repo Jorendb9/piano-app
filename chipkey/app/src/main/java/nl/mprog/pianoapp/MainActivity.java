@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private static final float DEF_INTENSITY_MIN = 0.97f , DEF_INTENSITY_MAX = 1.03f;
     private static final double LOG_MIN = 0.0, LOG_MAX = 3.69897;
 
-    public static String PACKAGE_NAME, TAG = "Main";
+    public static String PACKAGE_NAME;
 
 
 
@@ -87,6 +87,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
 
+            // update selected mod wheel parameter every time its changed
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
@@ -104,6 +105,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                     decayTime = (int) (ENV_MULTIPLIER * logScale(temp));
                 }
 
+                // inverse values to account for lower values giving a higher rate
                 else if (modSelect.equals("Vibrato Rate"))
                 {
                     vRate = 350 - (int)(70 * logScale(temp));
@@ -240,6 +242,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
+    // get note from list based on a given string
     public Note getNote (String id)
     {
         for (int i = 0; i < noteList.size(); i++)
@@ -379,10 +382,10 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
 
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == 1) {
+        if (requestCode == 1)
+        {
             if(resultCode == RESULT_OK)
             {
                 retrieveFXSettings(data);
@@ -460,22 +463,6 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     public float volumeConverter(float yCoordinates)
     {
         return (yCoordinates + 200)/1000;
-    }
-
-
-    // account for variable note release timing
-    public void releaseDelay(final Note note)
-    {
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
-        {
-            @Override
-            public void run() {
-                note.stop();
-            }
-
-        }, releaseTime);
     }
 
 
